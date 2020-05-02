@@ -6,6 +6,7 @@
 
 
 TEST(VectorTest, test1) {
-    Vector<int> a = Vector<int>();
-    EXPECT_EQ(a.getSize(), 11);
+    int size = 2;
+    Vector<int> a = Vector<int>(2);
+    EXPECT_EQ(a.getSize(), size);
 }
