@@ -4,9 +4,62 @@
 #include "gtest/gtest.h"
 #include "myStl/Vector/Vector.h"
 
-
-TEST(VectorTest, test1) {
+TEST(VectorTest, testInitialVectorSize) {
     int size = 2;
-    Vector<int> a = Vector<int>(2);
-    EXPECT_EQ(a.getSize(), size);
+    Vector<double> a = Vector<double>(size);
+    EXPECT_EQ(a.getSize(), 0);
+    EXPECT_EQ(a.getMaxSize(), size);
+    EXPECT_EQ(typeid(a.getData()), typeid(double*));
 }
+
+TEST(VectorTest, VectorResizeOnAddTest) {
+    int size = 0;
+    Vector<int> a = Vector<int>(size);
+    EXPECT_EQ(a.getSize(), 0);
+    EXPECT_EQ(a.getMaxSize(), 0);
+    a.add(0);
+    EXPECT_EQ(a.getSize(), 1);
+    EXPECT_EQ(a.getMaxSize(), 1);
+}
+
+TEST(VectorTest, VectorDoublesSizeOnAdd) {
+    int size = 3;
+    Vector<int> a = Vector<int>(size);
+    a.add(0);
+    EXPECT_EQ(a.getSize(), 1);
+    EXPECT_EQ(a.getMaxSize(), 3);
+    a.add(0);
+    EXPECT_EQ(a.getSize(), 2);
+    EXPECT_EQ(a.getMaxSize(), 3);
+    a.add(0);
+    EXPECT_EQ(a.getSize(), 3);
+    EXPECT_EQ(a.getMaxSize(), 3);
+    a.add(0);
+    EXPECT_EQ(a.getSize(), 4);
+    EXPECT_EQ(a.getMaxSize(), 6);
+}
+
+TEST(VectorTest, VectorResizeOnSet) {
+    int size = 0;
+    Vector<int> a = Vector<int>(size);
+
+    a.set(0, 1);
+    EXPECT_EQ(a.getSize(), 1);
+    EXPECT_EQ(a.getMaxSize(), 1);
+
+    a.set(1, 8);
+    EXPECT_EQ(a.getSize(), 2);
+    EXPECT_EQ(a.getMaxSize(), 2);
+
+
+    a.set(4, 3);
+    EXPECT_EQ(a.getSize(), 5);
+    EXPECT_EQ(a.getMaxSize(), 8);
+
+    EXPECT_EQ(a.get(0), 1);
+    EXPECT_EQ(a.get(1), 8);
+    EXPECT_EQ(a.get(4), 3);
+}
+
+
+
