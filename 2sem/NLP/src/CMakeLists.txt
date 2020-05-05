@@ -4,6 +4,6 @@ file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 
 set(SOURCES ${SOURCES})
 
-add_executable(${BINARY}_run ${SOURCES} main.cpp)
+add_executable(${BINARY}_run ${SOURCES} main.cpp myStl/String/String.h myStl/Vector/Vector.h)
 
 add_library(${BINARY}_lib STATIC ${SOURCES})

@@ -61,5 +61,29 @@ TEST(VectorTest, VectorResizeOnSet) {
     EXPECT_EQ(a.get(4), 3);
 }
 
+TEST(VectorTest, VectorCopyConstructor) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
 
+    EXPECT_TRUE(a == Vector<long long>(a));
+    EXPECT_EQ(a.getSize(), Vector<long long>(a).getSize());
+}
+
+TEST(VectorTest, TestDefaultOperatorEquality) {
+    Vector<long long> a(2);
+    a.add(1);
+    a.add(1);
+    a.add(1);
+    auto b = Vector(a);
+    b.set(2, 2);
+    EXPECT_FALSE(a == b);
+}
+
+TEST(VectorTest, VectorMoveConstructor) {
+    int a = 1;
+    auto b = Vector<long long>(2);
+}
 
