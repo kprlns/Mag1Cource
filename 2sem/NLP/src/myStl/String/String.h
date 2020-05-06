@@ -25,7 +25,11 @@ public:
     String(String<T>&& other)  noexcept
     : string(other.string){ std::cout << "Vector&&" << std::endl;}
     constexpr String<T>& operator=(const String<T>& other) noexcept {
-        std::cout << "Vector&=" << std::endl;
+        std::cout << "String&" << std::endl;
+        this->string = other.string;
+    }
+    constexpr String<T>& operator=(String<T>&& other) noexcept {
+        std::cout << "String&&" << std::endl;
         this->string = other.string;
     }
 
@@ -171,7 +175,7 @@ Vector<String<T>> String<T>::split(T splitter) {
             if(start < end) {
                 //std::cout << "!!!" << substring(start, end) << std::endl;
                 //std::cout << start << "  " << end << std::endl;
-                result.add(substring(start, end));
+                result.add(std::move(substring(start, end)));
             }
             end = i + 1;
             start = i + 1;

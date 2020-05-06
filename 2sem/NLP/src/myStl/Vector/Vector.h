@@ -69,6 +69,7 @@ public:
     }
 
     void add(const T& element);
+    void add(T&& element);
     void addAll(Vector<T>& other);
     void addAll(const T* array, int arraySize);
     void remove(int i);
@@ -117,6 +118,15 @@ void Vector<T>::add(const T& element) {
         increaseCapacity();
     }
     data[size] = element;
+    size++;
+}
+
+template<typename T>
+void Vector<T>::add(T&& element) {
+    if(size == maxSize) {
+        increaseCapacity();
+    }
+    data[size] = std::move(element);
     size++;
 }
 
@@ -216,7 +226,7 @@ Vector<T> Vector<T>::getInterval(int start, int end) {
     Vector<T> result(size);
     std::copy(data + start, data + end, result.data);
     result.size = size;
-    return result;
+    return std::move(result);
 }
 
 template<typename T>
