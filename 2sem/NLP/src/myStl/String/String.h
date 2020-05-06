@@ -16,6 +16,7 @@ public:
     String();
     String(int size);
     explicit String(const T* str);
+    String(String<T>& other);
 
     int getSize() const;
     unsigned long long hashCode();
@@ -48,6 +49,9 @@ private:
 
     bool compare(const T* other, int otherSize) const;
 };
+
+template<typename T>
+String<T>::String(String<T>& other) : string(other.string){}
 
 template<typename T>
 String<T>::String() : string(128) {
@@ -189,6 +193,8 @@ String<T> String<T>::substring(int start, int end) {
     result.string.swap(string.getInterval(start, end));
     return result;
 }
+
+
 
 
 #endif //NLP_STRING_H

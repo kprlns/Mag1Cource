@@ -80,7 +80,7 @@ Vector<T>::Vector(T* data, int size) {
 
 template<typename T>
 Vector<T>::Vector(Vector<T>& other) {
-    std::cout << "T&\n";
+    std::cout << "T&" << std::endl;
     this->size = other.size;
     this->maxSize = other.maxSize;
     this->data = allocate(maxSize);
