@@ -20,11 +20,53 @@
 
 template <typename T> class Vector {
 public:
-    explicit Vector(int size);
-    Vector(Vector<T>& other);
-    //Vector(Vector<T>&& other);
-    Vector(T* data, int size);
-    ~Vector();
+    explicit Vector(int size)  {
+        this->size = 0;
+        this->maxSize = size;
+        this->data = allocate(size);
+    }
+    Vector(Vector<T>& other)  {
+        std::cout << "Vector&" << std::endl;
+        this->size = other.size;
+        this->maxSize = other.maxSize;
+        this->data = allocate(maxSize);
+        std::copy(other.data, other.data + size, data);
+    }
+    Vector(T* data, int size) {
+        this->maxSize = size;
+        std::copy(data, data + size, this->data);
+    }
+    Vector(Vector<T>&& other)  {
+        std::cout << "Vector&&" << std::endl;
+        this->size = other.size;
+        this->maxSize = other.maxSize;
+        this->data = other.data;
+
+        other.data = nullptr;
+        //this->data = allocate(maxSize);
+        //std::copy(other.data, other.data + size, data);
+    }
+    ~Vector() {
+        if(data != nullptr) {
+            delete[] data;
+        }
+    }
+    Vector<T>& operator=(const Vector<T>& other) noexcept {
+        if(this == &other) { return *this; }
+        std::cout << "Vector&=" << std::endl;
+        delete data;
+        this->size = other.size;
+        this->maxSize = maxSize;
+        data = allocate(maxSize);
+        std::copy(other.data, other.data + size, data);
+    }
+    Vector<T>& operator=(Vector<T>&& other) noexcept {
+        std::cout << "Vector&&=" << std::endl;
+        this->data = other.data;
+        other.data = nullptr;
+        this->maxSize = other.maxSize;
+        this->size = other.size;
+    }
 
     void add(const T& element);
     void addAll(Vector<T>& other);
@@ -61,46 +103,6 @@ private:
 
     T* allocate(int size);
 };
-
-
-
-template<typename T>
-Vector<T>::Vector(int size) {
-
-    this->size = 0;
-    this->maxSize = size;
-    this->data = allocate(size);
-}
-
-template<typename T>
-Vector<T>::Vector(T* data, int size) {
-    this->maxSize = size;
-    std::copy(data, data + size, this->data);
-}
-
-template<typename T>
-Vector<T>::Vector(Vector<T>& other) {
-    std::cout << "T&" << std::endl;
-    this->size = other.size;
-    this->maxSize = other.maxSize;
-    this->data = allocate(maxSize);
-    std::copy(other.data, other.data + size, data);
-}
-
-/*
-template<typename T>
-Vector<T>::Vector(Vector<T>&& other) {
-    std::cout << "T&&\n";
-    this->size = other.size;
-    this->maxSize = other.maxSize;
-    this->data = other.data;
-
-    other.data = nullptr;
-    //this->data = allocate(maxSize);
-    //std::copy(other.data, other.data + size, data);
-}
-*/
-
 
 template<typename T>
 T* Vector<T>::allocate(int size) {
@@ -142,13 +144,6 @@ void Vector<T>::increaseCapacity(int minSize) {
         maxSize *= 2;
     }
     resize(maxSize * 2);
-}
-
-template<typename T>
-Vector<T>::~Vector() {
-    if(data != nullptr) {
-        delete[] data;
-    }
 }
 
 template<typename T>
@@ -218,7 +213,7 @@ int Vector<T>::getSize() const {
 template<typename T>
 Vector<T> Vector<T>::getInterval(int start, int end) {
     int size = end - start;
-    Vector<T> result = Vector<T>(size);
+    Vector<T> result(size);
     std::copy(data + start, data + end, result.data);
     result.size = size;
     return result;

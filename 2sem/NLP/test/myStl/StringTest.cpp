@@ -43,6 +43,13 @@ TEST(StringTest, SplitTest) {
     EXPECT_TRUE(splitted[3] == "d");
 }
 
+TEST(StringTest, SplitTest1) {
+    String<char> a("aaa bbb");
+    auto splitted = a.split(' ');
+    EXPECT_EQ(splitted.getSize(), 2);
+    EXPECT_TRUE(splitted[0] == "aaa");
+    EXPECT_TRUE(splitted[1] == "bbb");
+}
 
 
 

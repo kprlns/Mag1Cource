@@ -13,10 +13,21 @@
 
 template <typename T> class String {
 public:
-    String();
-    String(int size);
-    explicit String(const T* str);
-    String(String<T>& other);
+    String() : string(128) {}//string = Vector<T>(128);
+    String(int size) : string(size) {}//string = Vector<T>(128);
+    explicit String(const T* str) : string(std::char_traits<T>::length(str)) {
+        int size = string.getMaxSize();
+        //string = Vector<T>(size);
+        string.addAll(str, size);
+    }
+    String(String<T>& other)
+    : string(other.string){ std::cout << "Vector&" << std::endl;}
+    String(String<T>&& other)  noexcept
+    : string(other.string){ std::cout << "Vector&&" << std::endl;}
+    constexpr String<T>& operator=(const String<T>& other) noexcept {
+        std::cout << "Vector&=" << std::endl;
+        this->string = other.string;
+    }
 
     int getSize() const;
     unsigned long long hashCode();
@@ -36,7 +47,7 @@ public:
 
     void add(T el);
     String<T> substring(int start, int end);
-    Vector<String<T>> split(T c);
+    Vector<String<T>> split(T splitter);
 
 private:
     Vector<T> string;
@@ -50,23 +61,6 @@ private:
     bool compare(const T* other, int otherSize) const;
 };
 
-template<typename T>
-String<T>::String(String<T>& other) : string(other.string){}
-
-template<typename T>
-String<T>::String() : string(128) {
-    //string = Vector<T>(128);
-}
-template<typename T>
-String<T>::String(int size) : string(size) {
-    //string = Vector<T>(128);
-}
-template<typename T>
-String<T>::String(const T* str) : string(std::char_traits<T>::length(str)) {
-    int size = string.getMaxSize();
-    //string = Vector<T>(size);
-    string.addAll(str, size);
-}
 
 template<typename T>
 bool String<T>::operator==(String<T>& other) const {
@@ -164,22 +158,26 @@ void String<T>::trim() {
 }
 
 template<typename T>
-Vector<String<T>> String<T>::split(T c) {
+Vector<String<T>> String<T>::split(T splitter) {
     Vector result = Vector<String<T>>(32);
     int start = 0;
     int end = 0;
     for(int i = 0; i < getSize(); ++i) {
-        end++;
-        if(string[i] == c) {
+        char a = string[i];
+        if(string[i] != splitter) {
+            end++;
+        }
+        else {
             if(start < end) {
-                std::cout << "!!!" << substring(start, end) << std::endl;
-                std::cout << start << "  " << end << std::endl;
+                //std::cout << "!!!" << substring(start, end) << std::endl;
+                //std::cout << start << "  " << end << std::endl;
                 result.add(substring(start, end));
             }
-            end = i;
+            end = i + 1;
             start = i + 1;
             continue;
         }
+
     }
     if(start < end) {
         result.add(substring(start, end));
@@ -193,8 +191,5 @@ String<T> String<T>::substring(int start, int end) {
     result.string.swap(string.getInterval(start, end));
     return result;
 }
-
-
-
 
 #endif //NLP_STRING_H
