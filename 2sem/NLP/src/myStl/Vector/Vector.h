@@ -6,6 +6,7 @@
 #define NLP_VECTOR_H
 
 #include <iostream>
+#include <cstring>
 
 #define VECTOR_DEBUG
 #define log(message) do{ std::cout << message << std::endl; }while(0);
