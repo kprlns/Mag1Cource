@@ -7,6 +7,7 @@
 
 #include <ostream>
 
+#include "locale"
 #include "myStl/Vector/Vector.h"
 // std::char_traits<char>::length(str)
 
@@ -19,9 +20,11 @@ public:
     int getSize() const;
     unsigned long long hashCode();
 
-    bool operator==(String<T>& other);
-    bool operator==(String<T>&& other);
-    bool operator==(const T* other);
+    bool operator==(String<T>& other) const;
+    bool operator==(String<T>&& other) const;
+    bool operator==(const T* other) const;
+
+    void trim();
 
     String<T> operator+(String<T>& other);
     const T& operator[](int i) const;
@@ -31,16 +34,19 @@ public:
 
 
     void add(T el);
+    String<T> substring(int start, int end);
+    Vector<String<T>> split(T c);
+
 private:
     Vector<T> string;
     bool isHashRelevant = false;
     unsigned long long hash = 0;
     //Should be simple
-    const unsigned long long HASH_BASE = 37;
-    const wchar_t START_SYMBOL = 'a';
+    static const unsigned long long HASH_BASE = 37;
+    static const wchar_t START_SYMBOL = 'a';
 
 
-    bool compare(const T* other, int otherSize);
+    bool compare(const T* other, int otherSize) const;
 };
 
 template<typename T>
@@ -59,22 +65,22 @@ String<T>::String(const T* str) : string(std::char_traits<T>::length(str)) {
 }
 
 template<typename T>
-bool String<T>::operator==(String<T>& other) {
+bool String<T>::operator==(String<T>& other) const {
     return compare(other.string, other.string.getSize());
 }
 template<typename T>
-bool String<T>::operator==(String<T>&& other) {
+bool String<T>::operator==(String<T>&& other) const {
     return compare(other.string, other.string.getSize());
 }
 template<typename T>
-bool String<T>::operator==(const T* other) {
+bool String<T>::operator==(const T* other) const {
     int otherSize = std::char_traits<T>::length(other);
     return compare(other, otherSize);
 }
 
 
 template<typename T>
-bool String<T>::compare(const T* other, int otherSize) {
+bool String<T>::compare(const T* other, int otherSize) const {
     if(string.getSize() != otherSize) {
         return false;
     }
@@ -140,6 +146,49 @@ unsigned long long String<T>::hashCode() {
     return hash;
 }
 
+template<typename T>
+void String<T>::trim() {
+    int start = 0;
+    int end = getSize();
+    while(isspace(string[start]) && start < (end - 1)) {
+        start++;
+    }
+    while(isspace(string[end - 1]) && start < (end - 1)) {
+        end--;
+    }
+    string.swap(string.getInterval(start, end));
+}
+
+template<typename T>
+Vector<String<T>> String<T>::split(T c) {
+    Vector result = Vector<String<T>>(32);
+    int start = 0;
+    int end = 0;
+    for(int i = 0; i < getSize(); ++i) {
+        end++;
+        if(string[i] == c) {
+            if(start < end) {
+                std::cout << "!!!" << substring(start, end) << std::endl;
+                std::cout << start << "  " << end << std::endl;
+                result.add(substring(start, end));
+            }
+            end = i;
+            start = i + 1;
+            continue;
+        }
+    }
+    if(start < end) {
+        result.add(substring(start, end));
+    }
+    return result;
+}
+
+template<typename T>
+String<T> String<T>::substring(int start, int end) {
+    String<T> result(0);
+    result.string.swap(string.getInterval(start, end));
+    return result;
+}
 
 
 #endif //NLP_STRING_H

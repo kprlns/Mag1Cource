@@ -20,10 +20,17 @@
 
 template <typename T> class Vector {
 public:
+    explicit Vector(int size);
+    Vector(Vector<T>& other);
+    //Vector(Vector<T>&& other);
+    Vector(T* data, int size);
+    ~Vector();
 
     void add(const T& element);
     void addAll(Vector<T>& other);
     void addAll(const T* array, int arraySize);
+    void remove(int i);
+
     bool operator==(Vector<T>& other);
     bool operator==(Vector<T>&& other);
 
@@ -32,21 +39,19 @@ public:
 
     void resize(int newMaxSize);
 
-    explicit Vector(int size);
-    Vector(Vector<T>& other);
-    //Vector(Vector<T>&& other);
-    Vector(T* data, int size);
-    ~Vector();
+
 
 
     int getSize() const;
     int getMaxSize() {return maxSize;}
     T* getData() {return data;}
+    Vector<T> getInterval(int start, int end);
 
     void set(int i, T element);
     T& get(int i) const {return data[i];};
     const T& operator[](int i);
 
+    void swap(Vector<T>&& other);
 private:
     T* data;
     int maxSize{0};
@@ -82,15 +87,19 @@ Vector<T>::Vector(Vector<T>& other) {
     std::copy(other.data, other.data + size, data);
 }
 
-/*template<typename T>
+/*
+template<typename T>
 Vector<T>::Vector(Vector<T>&& other) {
     std::cout << "T&&\n";
     this->size = other.size;
     this->maxSize = other.maxSize;
     this->data = other.data;
+
+    other.data = nullptr;
     //this->data = allocate(maxSize);
     //std::copy(other.data, other.data + size, data);
-}*/
+}
+*/
 
 
 template<typename T>
@@ -137,7 +146,9 @@ void Vector<T>::increaseCapacity(int minSize) {
 
 template<typename T>
 Vector<T>::~Vector() {
-    delete [] data;
+    if(data != nullptr) {
+        delete[] data;
+    }
 }
 
 template<typename T>
@@ -174,10 +185,10 @@ void Vector<T>::addAll(const T* array, int arraySize) {
 
 template<typename T>
 bool Vector<T>::operator==(Vector<T>& other) {
-    if(this->maxSize != other.maxSize) {
+    if(this->size != other.size) {
         return false;
     }
-    for(int i = 0; i < maxSize; ++i) {
+    for(int i = 0; i < size; ++i) {
         if(this->get(i) != other.get(i)) {
             return false;
         }
@@ -202,6 +213,46 @@ template<typename T>
 int Vector<T>::getSize() const {
     return size;
 }
+
+/// Makes interval [start, end) from vector
+template<typename T>
+Vector<T> Vector<T>::getInterval(int start, int end) {
+    int size = end - start;
+    Vector<T> result = Vector<T>(size);
+    std::copy(data + start, data + end, result.data);
+    result.size = size;
+    return result;
+}
+
+template<typename T>
+void Vector<T>::remove(int i) {
+#ifdef VECTOR_DEBUG
+    logCondition(i >= maxSize, "Error: Vector out of bounds")
+    logCondition(i >= size, "Warn: trying to remove element [i > size]")
+#endif
+    if(i == maxSize - 1) {
+        size--;
+        return;
+    }
+    std::copy(data + i + 1, data + size, data + i);
+    size--;
+}
+
+template<typename T>
+void Vector<T>::swap(Vector<T>&& other) {
+    T* tmp = this->data;
+    this->data = other.data;
+    other.data = tmp;
+
+    int tmpSize = this->size;
+    this->size = other.size;
+    other.size = tmpSize;
+
+    tmpSize = this->maxSize;
+    this->maxSize = other.maxSize;
+    other.maxSize = tmpSize;
+}
+
 
 
 #endif //NLP_VECTOR_H

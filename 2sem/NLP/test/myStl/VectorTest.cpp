@@ -87,3 +87,112 @@ TEST(VectorTest, VectorMoveConstructor) {
     auto b = Vector<long long>(2);
 }
 
+TEST(VectorTest, MakeIntervalTest1) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    Vector b = a.getInterval(0, a.getSize());
+    EXPECT_TRUE(a == b);
+}
+
+TEST(VectorTest, MakeIntervalTest2) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    Vector b = a.getInterval(2, a.getSize());
+    EXPECT_EQ(b[0], 3);
+    EXPECT_EQ(b[1], 4);
+    EXPECT_EQ(b.getSize(), 2);
+}
+
+TEST(VectorTest, MakeIntervalTest3) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    Vector b = a.getInterval(0, 2);
+    EXPECT_EQ(b[0], 1);
+    EXPECT_EQ(b[1], 2);
+    EXPECT_EQ(b.getSize(), 2);
+}
+
+TEST(VectorTest, MakeIntervalTest4) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    Vector b = a.getInterval(1, 2);
+    EXPECT_EQ(b[0], 2);
+    EXPECT_EQ(b.getSize(), 1);
+}
+
+TEST(VectorTest, MakeIntervalTest5) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    Vector b = a.getInterval(1, 1);
+    EXPECT_EQ(b.getSize(), 0);
+}
+
+TEST(VectorTest, TestRemove) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.remove(0);
+    EXPECT_EQ(a[0], 2);
+    EXPECT_EQ(a[1], 3);
+    EXPECT_EQ(a[2], 4);
+    EXPECT_EQ(a.getSize(), 3);
+}
+
+TEST(VectorTest, TestRemove1) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.remove(2);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+    EXPECT_EQ(a[2], 4);
+    EXPECT_EQ(a.getSize(), 3);
+}
+
+TEST(VectorTest, TestRemove2) {
+    int size = 1;
+    Vector<long long> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.remove(3);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+    EXPECT_EQ(a[2], 3);
+    EXPECT_EQ(a.getSize(), 3);
+}

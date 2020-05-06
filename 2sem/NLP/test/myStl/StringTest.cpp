@@ -4,6 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "myStl/String/String.h"
+#include <locale>
 
 TEST(StringTest, ConstructorAndEqualsTest) {
     String<char> s("abc");
@@ -16,3 +17,46 @@ TEST(StringTest, StringAddAndComparision) {
     //std::cout << a + b << "!!";
     EXPECT_TRUE(a + b == "ab");
 }
+
+TEST(StringTest, TrimTest) {
+    String<char> a("\nabc rk\nfw \t adl,l;  \n\t");
+    a.trim();
+    EXPECT_TRUE(a == "abc rk\nfw \t adl,l;");
+}
+
+TEST(StringTest, SubstringTrst) {
+    String<char> a("abcde");
+    EXPECT_TRUE(a.substring(0, 2) == "ab");
+    EXPECT_TRUE(a.substring(2, 3) == "c");
+    EXPECT_TRUE(a.substring(1, 3) == "bc");
+    EXPECT_TRUE(a.substring(2, 5) == "cde");
+    EXPECT_TRUE(a == "abcde");
+}
+
+TEST(StringTest, SplitTest) {
+    String<char> a("aaa bbb  cc    d ");
+    auto splitted = a.split(' ');
+    EXPECT_EQ(splitted.getSize(), 4);
+    EXPECT_TRUE(splitted[0] == "aaa");
+    EXPECT_TRUE(splitted[1] == "bbb");
+    EXPECT_TRUE(splitted[2] == "cc");
+    EXPECT_TRUE(splitted[3] == "d");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
