@@ -19,11 +19,9 @@ class Err(MetricInterface):
 
         if val_sum == 0:
             return 0
-        values = values / val_sum
 
-        values = values / sum(values)
         for i in range(min(level, len(values))):
-            res += values[i] / (i + 1)
+            res += (values[i] / val_sum) / (i + 1)
         return res
 
     def evaluate(self, values, level: int, separator: str = '.', print_res: bool = True):
