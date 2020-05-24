@@ -7,33 +7,43 @@
 
 #include <ostream>
 
-#include "locale"
+#include <locale>
 #include "myStl/Vector/Vector.h"
+
+
 // std::char_traits<char>::length(str)
 
 template <typename T> class String {
 public:
-    String() : string(128) {}//string = Vector<T>(128);
+    String() {}//string = Vector<T>(128);
     String(int size) : string(size) {}//string = Vector<T>(128);
     explicit String(const T* str) : string(std::char_traits<T>::length(str)) {
         int size = string.getMaxSize();
-        //string = Vector<T>(size);
         string.addAll(str, size);
     }
+    String(const T* str, int size) : string(size) {
+        int sz = string.getMaxSize();
+        string.addAll(str, sz);
+    }
     String(String<T>& other)
-    : string(other.string){ std::cout << "Vector&" << std::endl;}
+    : string(other.string){ std::cout << "String&" << std::endl;}
     String(String<T>&& other)  noexcept
-    : string(other.string){ std::cout << "Vector&&" << std::endl;}
+    : string(other.string){ std::cout << "String&&" << std::endl;}
+
     constexpr String<T>& operator=(const String<T>& other) noexcept {
-        std::cout << "String&" << std::endl;
+        std::cout << "String&=" << std::endl;
         this->string = other.string;
+        return *this;
     }
     constexpr String<T>& operator=(String<T>&& other) noexcept {
-        std::cout << "String&&" << std::endl;
-        this->string = other.string;
+        std::cout << "String&&=" << std::endl;
+        this->string = std::move(other.string);
+        return *this;
     }
 
+
     int getSize() const;
+    int getMaxSize() const;
     unsigned long long hashCode();
 
     bool operator==(String<T>& other) const;
@@ -47,6 +57,9 @@ public:
     bool operator<(String<T>& other);
 
     template<typename C> friend std::ostream& operator<<(std::ostream& out, const String<C>& obj);
+    template<typename C> friend std::wostream & operator<<(std::wostream & out, const String<C>& obj);
+
+    void print();
 
 
     void add(T el);
@@ -110,11 +123,26 @@ String<T> String<T>::operator+(String<T>& other) {
 }
 
 template<typename C>
-std::ostream& operator<<(std::ostream& out, const String<C>& str) {
+std::ostream & operator<<(std::ostream& out, const String<C>& str) {
     for(int i = 0; i < str.getSize(); ++i) {
         out << str[i];
     }
     return out;
+}
+
+template<typename C>
+std::wostream& operator<<(std::wostream & out, const String<C>& str) {
+    for(int i = 0; i < str.getSize(); ++i) {
+        out << str[i];
+    }
+    return out;
+}
+
+template<typename T>
+void String<T>::print() {
+    for(int i = 0; i < getSize(); ++i) {
+        std::wcout << (T)string.get(i);
+    }
 }
 
 template<typename T>
@@ -125,6 +153,11 @@ bool String<T>::operator<(String<T>& other) {
 template<typename T>
 int String<T>::getSize() const {
     return string.getSize();
+}
+
+template<typename T>
+int String<T>::getMaxSize() const {
+    return string.getMaxSize();
 }
 
 template<typename T>

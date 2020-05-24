@@ -4,7 +4,7 @@ from metric.Ndcg import Ndcg
 from metric.Err import Err
 
 metric = Err()
-level = 5
+level = 1
 
 lines = open("labl2_stats/yandex.txt").readlines()
 print('--\n' + str(metric.evaluate(lines, level)))

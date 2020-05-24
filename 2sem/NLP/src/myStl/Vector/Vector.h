@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cstring>
 
+
 #define VECTOR_DEBUG
 #define log(message) do{ std::cout << message << std::endl; }while(0);
 
@@ -25,6 +26,7 @@ public:
         this->maxSize = size;
         this->data = allocate(size);
     }
+    Vector() {}
     Vector(Vector<T>& other)  {
         std::cout << "Vector&" << std::endl;
         this->size = other.size;
@@ -56,9 +58,10 @@ public:
         std::cout << "Vector&=" << std::endl;
         delete data;
         this->size = other.size;
-        this->maxSize = maxSize;
+        this->maxSize = other.maxSize;
         data = allocate(maxSize);
         std::copy(other.data, other.data + size, data);
+        return *this;
     }
     Vector<T>& operator=(Vector<T>&& other) noexcept {
         std::cout << "Vector&&=" << std::endl;
@@ -66,6 +69,7 @@ public:
         other.data = nullptr;
         this->maxSize = other.maxSize;
         this->size = other.size;
+        return *this;
     }
 
     void add(const T& element);

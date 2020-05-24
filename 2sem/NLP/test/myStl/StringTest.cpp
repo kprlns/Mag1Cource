@@ -51,7 +51,12 @@ TEST(StringTest, SplitTest1) {
     EXPECT_TRUE(splitted[1] == "bbb");
 }
 
-
+TEST(StringTest, SplitTest2) {
+    String<char> a("aaa:");
+    auto splitted = a.split(':');
+    EXPECT_EQ(splitted.getSize(), 1);
+    EXPECT_TRUE(splitted[0] == "aaa");
+}
 
 
 

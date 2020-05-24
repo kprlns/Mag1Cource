@@ -12,6 +12,6 @@ add_subdirectory(test)
 add_subdirectory(lib/googletest)
 
 
-add_executable(NLP main.cpp src/myStl/Vector/Vector.h test/myStl/VectorTest.cpp src/myStl/String/String.h test/myStl/StringTest.cpp)
+add_executable(NLP main.cpp src/myStl/Vector/Vector.h test/myStl/VectorTest.cpp src/myStl/String/String.h test/myStl/StringTest.cpp src/dto/Document.h src/parser/CorpusParser.h)
 
 
