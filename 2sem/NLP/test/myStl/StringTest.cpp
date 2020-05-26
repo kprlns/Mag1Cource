@@ -26,36 +26,39 @@ TEST(StringTest, TrimTest) {
 
 TEST(StringTest, SubstringTrst) {
     String<char> a("abcde");
-    EXPECT_TRUE(a.substring(0, 2) == "ab");
-    EXPECT_TRUE(a.substring(2, 3) == "c");
-    EXPECT_TRUE(a.substring(1, 3) == "bc");
-    EXPECT_TRUE(a.substring(2, 5) == "cde");
+    EXPECT_TRUE((*a.substring(0, 2)) == "ab");
+    EXPECT_TRUE((*a.substring(2, 3)) == "c");
+    EXPECT_TRUE((*a.substring(1, 3)) == "bc");
+    EXPECT_TRUE((*a.substring(2, 5)) == "cde");
     EXPECT_TRUE(a == "abcde");
 }
 
 TEST(StringTest, SplitTest) {
     String<char> a("aaa bbb  cc    d ");
     auto splitted = a.split(' ');
-    EXPECT_EQ(splitted.getSize(), 4);
-    EXPECT_TRUE(splitted[0] == "aaa");
-    EXPECT_TRUE(splitted[1] == "bbb");
-    EXPECT_TRUE(splitted[2] == "cc");
-    EXPECT_TRUE(splitted[3] == "d");
+    EXPECT_EQ(splitted->getSize(), 4);
+    EXPECT_TRUE(*(*splitted)[0] == "aaa");
+    EXPECT_TRUE(*(*splitted)[1] == "bbb");
+    EXPECT_TRUE(*(*splitted)[2] == "cc");
+    EXPECT_TRUE(*(*splitted)[3] == "d");
 }
 
 TEST(StringTest, SplitTest1) {
+    std::wcout << L"-----------------------\n";
     String<char> a("aaa bbb");
     auto splitted = a.split(' ');
-    EXPECT_EQ(splitted.getSize(), 2);
-    EXPECT_TRUE(splitted[0] == "aaa");
-    EXPECT_TRUE(splitted[1] == "bbb");
+    EXPECT_EQ(splitted->getSize(), 2);
+    EXPECT_TRUE(*(*splitted)[0] == "aaa");
+    EXPECT_TRUE(*(*splitted)[1] == "bbb");
+    std::wcout << L"-----------------------\n";
+
 }
 
 TEST(StringTest, SplitTest2) {
     String<char> a("aaa:");
     auto splitted = a.split(':');
-    EXPECT_EQ(splitted.getSize(), 1);
-    EXPECT_TRUE(splitted[0] == "aaa");
+    EXPECT_EQ(splitted->getSize(), 1);
+    EXPECT_TRUE(*(*splitted)[0] == "aaa");
 }
 
 

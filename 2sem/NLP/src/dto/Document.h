@@ -10,7 +10,10 @@
 
 class Document {
 public:
-    Document() {}
+    Document() {
+        text = nullptr;
+        title = nullptr;
+    }
     Document(String<wchar_t>* title, String<wchar_t>* text, long long id) {
         this->title = title;
         this->text = text;
@@ -23,7 +26,7 @@ public:
     }
 
     [[nodiscard]] long long int getId() const { return id; }
-    [[nodiscard]] String<wchar_t>* getHeader() const { return title; }
+    [[nodiscard]] String<wchar_t>* getTitle() const { return title; }
     [[nodiscard]] String<wchar_t>* getText() const { return text; }
 
     void setId(long long int id) { this->id = id; }

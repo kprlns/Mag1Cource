@@ -25,19 +25,29 @@ public:
         int sz = string.getMaxSize();
         string.addAll(str, sz);
     }
-    String(String<T>& other)
-    : string(other.string){ std::cout << "String&" << std::endl;}
-    String(String<T>&& other)  noexcept
-    : string(other.string){ std::cout << "String&&" << std::endl;}
+    String(String<T>& other) : string(other.string) {
+        std::cout << "String&" << std::endl;
+        hash = other.hash;
+        isHashRelevant = other.isHashRelevant;
+    }
+    String(String<T>&& other)  noexcept : string(other.string){
+        std::cout << "String&&" << std::endl;
+        hash = other.hash;
+        isHashRelevant = other.isHashRelevant;
+    }
 
     constexpr String<T>& operator=(const String<T>& other) noexcept {
         std::cout << "String&=" << std::endl;
         this->string = other.string;
+        hash = other.hash;
+        isHashRelevant = other.isHashRelevant;
         return *this;
     }
     constexpr String<T>& operator=(String<T>&& other) noexcept {
         std::cout << "String&&=" << std::endl;
         this->string = std::move(other.string);
+        hash = other.hash;
+        isHashRelevant = other.isHashRelevant;
         return *this;
     }
 
@@ -49,7 +59,7 @@ public:
     bool operator==(String<T>& other) const;
     bool operator==(String<T>&& other) const;
     bool operator==(const T* other) const;
-
+    bool contains(T pattern);
     void trim();
 
     String<T> operator+(String<T>& other);
@@ -61,10 +71,14 @@ public:
 
     void print();
 
-
+    void set(int i, T val) {
+        isHashRelevant = false;
+        string.set(i, val);
+    }
     void add(T el);
-    String<T> substring(int start, int end);
-    Vector<String<T>> split(T splitter);
+    String<T>* substring(int start, int end);
+    Vector<String<T>*>* split(T splitter);
+    Vector<String<T>*>* splitIfContains(T splitter);
 
 private:
     Vector<T> string;
@@ -72,7 +86,7 @@ private:
     unsigned long long hash = 0;
     //Should be simple
     static const unsigned long long HASH_BASE = 37;
-    static const wchar_t START_SYMBOL = 'a';
+    static const wchar_t START_SYMBOL = L'а';
 
 
     bool compare(const T* other, int otherSize) const;
@@ -195,8 +209,8 @@ void String<T>::trim() {
 }
 
 template<typename T>
-Vector<String<T>> String<T>::split(T splitter) {
-    Vector result = Vector<String<T>>(32);
+Vector< String<T>* >* String<T>::split(T splitter) {
+    auto result = new Vector< String<T>* >(32);
     int start = 0;
     int end = 0;
     for(int i = 0; i < getSize(); ++i) {
@@ -208,25 +222,43 @@ Vector<String<T>> String<T>::split(T splitter) {
             if(start < end) {
                 //std::cout << "!!!" << substring(start, end) << std::endl;
                 //std::cout << start << "  " << end << std::endl;
-                result.add(std::move(substring(start, end)));
+                result->add(substring(start, end));
             }
             end = i + 1;
             start = i + 1;
             continue;
         }
-
     }
     if(start < end) {
-        result.add(substring(start, end));
+        result->add(substring(start, end));
     }
     return result;
 }
 
 template<typename T>
-String<T> String<T>::substring(int start, int end) {
-    String<T> result(0);
-    result.string.swap(string.getInterval(start, end));
+Vector< String<T>* >* String<T>::splitIfContains(T splitter) {
+    if(contains(splitter)) {
+        return split(splitter);
+    }
+    return nullptr;
+}
+
+
+template<typename T>
+String<T>* String<T>::substring(int start, int end) {
+    auto* result = new String(0);
+    result->string.swap(string.getInterval(start, end));
     return result;
+}
+
+template<typename T>
+bool String<T>::contains(T pattern) {
+    for(int i = 0; i < getSize(); ++i) {
+        if(string[i] == pattern) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #endif //NLP_STRING_H

@@ -59,15 +59,14 @@ public:
     }
 
     static String<wchar_t>* extractTextValue(String<wchar_t>& line) {
-        return new String(
-                line.substring(findEntryForward(line, L'"', 3) + 1,
-                               findEntryBackward(line, L'"', 1)));
+        return line.substring(findEntryForward(line, L'"', 3) + 1,
+                               findEntryBackward(line, L'"', 1));
     }
     static String<wchar_t>* extractKey(String<wchar_t>& line) {
-        return new String(
-                line.substring(findEntryForward(line, L'"', 1) + 1,
-                               findEntryForward(line, L'"', 2)));
+        return line.substring(findEntryForward(line, L'"', 1) + 1,
+                               findEntryForward(line, L'"', 2));
     }
+
 
 private:
 };

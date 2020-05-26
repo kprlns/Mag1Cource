@@ -20,17 +20,22 @@ public:
         init();
     }
 
-    Document* getDocument() {
+    Document* getNextDocument() {
         auto document = new Document();
         //String<wchar_t>*
         bool isDocumentPresent = true;
         for(int i = 0; i < 3; ++i) {
             std::wstring tmpString;
-            if(!std::getline(input, tmpString)) {
+            if(input.eof() || input.bad()) {
                 delete document;
                 return nullptr;
             }
+            std::getline(input, tmpString, L'\n');
             String<wchar_t> line(tmpString.data(), tmpString.length());
+            if(line == L"}") {
+                delete document;
+                return nullptr;
+            }
             String<wchar_t>* key = ParserUtils::extractKey(line);
             //std::wcout << key << L'\n' << value << L"\n----\n";
             if((*key) == TITLE) {

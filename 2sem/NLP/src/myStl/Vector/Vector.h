@@ -71,6 +71,13 @@ public:
         this->size = other.size;
         return *this;
     }
+    void deleteAll() {
+        for(int i = 0; i < getSize(); ++i) {
+            if(data[i] != nullptr) {
+                delete data[i];
+            }
+        }
+    }
 
     void add(const T& element);
     void add(T&& element);
