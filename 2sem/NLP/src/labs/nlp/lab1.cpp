@@ -15,14 +15,31 @@ int main() {
     std::wcout.imbue(std::locale("en_US.UTF-8"));
 
     //std::wcout << L"Hello lab1\n";
-
-    CorpusParser parser("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGames.json");
-    Document* document = parser.getNextDocument();
-    auto* splits = Tokenization::split(document);
-    for(int i = 0; i < splits->getSize(); ++i) {
-        std::wcout << L"|" << (*splits->get(i)) << L"|\n";
+    Vector<int> tokensCnt(4096);
+    Vector<int> lengthSum(4096);
+    int totalTokens = 0;
+    int totalLength = 0;
+    int totalDocs = 0;
+    CorpusParser parser("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    while (true) {
+        Document *document = parser.getNextDocument();
+        if(document == nullptr) {
+            break;
+        }
+        auto *splits = Tokenization::makeTokens(document);
+        totalDocs++;
+        totalTokens += splits->getSize();
+        for (int i = 0; i < splits->getSize(); ++i) {
+            totalLength += splits->get(i)->getSize();
+            //std::wcout << L"|" << (*splits->get(i)) << L"|\n";
+        }
+        //std::wcout << L"=============================\n";
+        splits->deleteAll();
+        delete splits;
+        delete document;
     }
-    splits->deleteAll();
-    delete splits;
-    delete document;
+    std::wcout << L"Total length: " << totalLength << L"\n";
+    std::wcout << L"Total tokens: " << totalTokens << L"\n";
+    std::wcout << L"Total docs: " << totalDocs << L"\n";
+
 }

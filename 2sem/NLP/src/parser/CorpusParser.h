@@ -17,6 +17,7 @@ class CorpusParser {
 public:
     explicit CorpusParser(const char* filename) {
         input = std::wifstream(filename);
+        cntLine = 0;
         init();
     }
 
@@ -31,6 +32,8 @@ public:
                 return nullptr;
             }
             std::getline(input, tmpString, L'\n');
+            cntLine++;
+            //std::wcout << cntLine << std::endl;
             String<wchar_t> line(tmpString.data(), tmpString.length());
             if(line == L"}") {
                 delete document;
@@ -70,7 +73,7 @@ private:
     constexpr static const wchar_t TEXT[] = L"text";
 
     std::wifstream input;
-
+    int cntLine;
     void init() {
         skipLines(5);
     }
@@ -79,6 +82,7 @@ private:
         for(int i = 0; i < linesToSkip; ++i) {
             std::getline(input, str);
         }
+        cntLine += linesToSkip;
     }
 
 };

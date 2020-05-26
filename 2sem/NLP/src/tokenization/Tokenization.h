@@ -11,7 +11,7 @@
 
 class Tokenization {
 public:
-    static Vector< String<wchar_t >* >* split(Document* document) {
+    static Vector< String<wchar_t >* >* makeTokens(Document* document) {
         auto* result = new Vector< String<wchar_t>* >(256);
         addAllSplits(document->getTitle(), result);
         addAllSplits(document->getText(), result);
@@ -24,7 +24,7 @@ private:
     static void addAllSplits(String<wchar_t>* toAdd, Vector< String<wchar_t>* >* result) {
         auto* tokens = toAdd->split(L' ');
         for(int i = 0; i < tokens->getSize(); ++i) {
-            std::wcout << i << L"(" << (*tokens->get(i)) << L")" << std::endl;
+            //std::wcout << i << L"(" << (*tokens->get(i)) << L")" << std::endl;
             auto* splittedToken = tokens->get(i)->splitIfContains(L'-');
             if(splittedToken != nullptr) {
                 for(int j = 0; j < splittedToken->getSize(); j++) {

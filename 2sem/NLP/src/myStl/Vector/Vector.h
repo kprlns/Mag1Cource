@@ -28,7 +28,9 @@ public:
     }
     Vector() {}
     Vector(Vector<T>& other)  {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "Vector&" << std::endl;
+#endif
         this->size = other.size;
         this->maxSize = other.maxSize;
         this->data = allocate(maxSize);
@@ -39,7 +41,9 @@ public:
         std::copy(data, data + size, this->data);
     }
     Vector(Vector<T>&& other)  {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "Vector&&" << std::endl;
+#endif
         this->size = other.size;
         this->maxSize = other.maxSize;
         this->data = other.data;
@@ -55,7 +59,9 @@ public:
     }
     Vector<T>& operator=(const Vector<T>& other) noexcept {
         if(this == &other) { return *this; }
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "Vector&=" << std::endl;
+#endif
         delete data;
         this->size = other.size;
         this->maxSize = other.maxSize;
@@ -64,7 +70,9 @@ public:
         return *this;
     }
     Vector<T>& operator=(Vector<T>&& other) noexcept {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "Vector&&=" << std::endl;
+#endif
         this->data = other.data;
         other.data = nullptr;
         this->maxSize = other.maxSize;

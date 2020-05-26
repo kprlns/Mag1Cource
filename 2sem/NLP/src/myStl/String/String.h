@@ -26,25 +26,33 @@ public:
         string.addAll(str, sz);
     }
     String(String<T>& other) : string(other.string) {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "String&" << std::endl;
+#endif
         hash = other.hash;
         isHashRelevant = other.isHashRelevant;
     }
     String(String<T>&& other)  noexcept : string(other.string){
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "String&&" << std::endl;
+#endif
         hash = other.hash;
         isHashRelevant = other.isHashRelevant;
     }
 
     constexpr String<T>& operator=(const String<T>& other) noexcept {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "String&=" << std::endl;
+#endif
         this->string = other.string;
         hash = other.hash;
         isHashRelevant = other.isHashRelevant;
         return *this;
     }
     constexpr String<T>& operator=(String<T>&& other) noexcept {
+#ifdef DEBUG_CONSTRUCTOR
         std::cout << "String&&=" << std::endl;
+#endif
         this->string = std::move(other.string);
         hash = other.hash;
         isHashRelevant = other.isHashRelevant;
