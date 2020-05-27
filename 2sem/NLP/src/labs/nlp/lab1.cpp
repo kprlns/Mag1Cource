@@ -13,7 +13,6 @@ struct DelimeterInteger : std::numpunct<wchar_t> {
     wchar_t do_thousands_sep() const { return L'\u200c'; }
     std::string do_grouping() const { return "~"; }
 };
-//set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -mtune=native")
 
 int main() {
     std::setlocale(LC_ALL,"");
