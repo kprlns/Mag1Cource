@@ -23,18 +23,32 @@ private:
 
     static void addAllSplits(String<wchar_t>* toAdd, Vector< String<wchar_t>* >* result) {
         auto* tokens = toAdd->split(L' ');
-        for(int i = 0; i < tokens->getSize(); ++i) {
+        int tokensSize = tokens->getSize();
+        for(int i = 0; i < tokensSize; ++i) {
             //std::wcout << i << L"(" << (*tokens->get(i)) << L")" << std::endl;
-            auto* splittedToken = tokens->get(i)->splitIfContains(L'-');
+/*            auto* splittedToken = tokens->get(i)->splitIfContains(L'-');
             if(splittedToken != nullptr) {
-                for(int j = 0; j < splittedToken->getSize(); j++) {
+
+                for (int j = 0; j < splittedToken->getSize(); j++) {
                     result->add(splittedToken->get(j));
                 }
                 delete splittedToken;
-            }
+            }*/
+            //addAllSubtokens(tokens->get(i), L'-', result);
             result->add(tokens->get(i));
         }
         delete tokens;
+    }
+
+    static inline void addAllSubtokens(String<wchar_t>* string, wchar_t splitter, Vector< String<wchar_t>* >* result) {
+        auto* splittedToken = string->splitIfContains(splitter);
+        if(splittedToken != nullptr) {
+            //int splittedSize = splittedToken->getSize();
+            for(int j = 0; j < splittedToken->getSize() && splittedToken->getSize() > 1; j++) {
+                result->add(splittedToken->get(j));
+            }
+            delete splittedToken;
+        }
     }
 };
 
