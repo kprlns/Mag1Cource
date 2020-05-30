@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "myStl/String/String.h"
+#include "myStl/String.h"
 
 int main() {
 

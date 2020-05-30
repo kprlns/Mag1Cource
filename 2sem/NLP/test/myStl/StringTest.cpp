@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "myStl/String/String.h"
+#include "myStl/String.h"
 #include <locale>
 
 TEST(StringTest, ConstructorAndEqualsTest) {

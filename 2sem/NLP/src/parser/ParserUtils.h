@@ -5,7 +5,7 @@
 #ifndef NLP_PARSERUTILS_H
 #define NLP_PARSERUTILS_H
 
-#include "myStl/String/String.h"
+#include "myStl/String.h"
 
 class ParserUtils {
 public:

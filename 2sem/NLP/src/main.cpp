@@ -8,7 +8,7 @@
 #include <string>
 #include <parser/CorpusParser.h>
 
-#include "myStl/String/String.h"
+#include "myStl/String.h"
 
 int main1() {
     //auto a = std::vector<int>(2, 0);

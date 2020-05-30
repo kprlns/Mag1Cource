@@ -2,7 +2,7 @@
 // Created by Никита on 02.05.2020.
 //
 #include "gtest/gtest.h"
-#include "myStl/Vector/Vector.h"
+#include "myStl/Vector.h"
 
 TEST(VectorTest, testInitialVectorSize) {
     int size = 2;

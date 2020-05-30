@@ -8,7 +8,7 @@
 #include <ostream>
 
 #include <locale>
-#include "myStl/Vector/Vector.h"
+#include "Vector.h"
 
 
 // std::char_traits<char>::length(str)

@@ -6,7 +6,7 @@
 #define NLP_DOCUMENT_H
 
 
-#include <myStl/String/String.h>
+#include <myStl/String.h>
 
 class Document {
 public:

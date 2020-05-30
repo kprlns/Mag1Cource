@@ -5,8 +5,8 @@
 #ifndef NLP_TOKENIZATION_H
 #define NLP_TOKENIZATION_H
 
-#include "myStl/Vector/Vector.h"
-#include "myStl/String/String.h"
+#include "myStl/Vector.h"
+#include "myStl/String.h"
 #include "dto/Document.h"
 
 class Tokenization {

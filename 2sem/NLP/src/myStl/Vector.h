@@ -9,7 +9,7 @@
 #include <cstring>
 
 
-#define VECTOR_DEBUG
+//#define VECTOR_DEBUG
 #define log(message) do{ std::cout << message << std::endl; }while(0);
 
 #define logCondition(condition, message) do{ \
@@ -92,6 +92,7 @@ public:
     void addAll(Vector<T>& other);
     void addAll(const T* array, int arraySize);
     void remove(int i);
+    void insertAt(int i, T& element);
 
     bool operator==(Vector<T>& other);
     bool operator==(Vector<T>&& other);
@@ -248,19 +249,33 @@ Vector<T> Vector<T>::getInterval(int start, int end) {
     return std::move(result);
 }
 
+// TODO tests
 template<typename T>
 void Vector<T>::remove(int i) {
 #ifdef VECTOR_DEBUG
     logCondition(i >= maxSize, "Error: Vector out of bounds")
     logCondition(i >= size, "Warn: trying to remove element [i > size]")
 #endif
-    if(i == maxSize - 1) {
+    if(i == size - 1) {
         size--;
         return;
     }
     std::copy(data + i + 1, data + size, data + i);
     size--;
 }
+
+// TODO tests
+template<typename T>
+void Vector<T>::insertAt(int i, T& element) {
+#ifdef VECTOR_DEBUG
+    logCondition(i >= maxSize, "Error: Vector out of bounds")
+    logCondition(i >= size, "Warn: trying to remove element [i > size]")
+#endif
+    std::copy(data + i, data + size, data + i + 1);
+    data[i] = element;
+    size++;
+}
+
 
 template<typename T>
 void Vector<T>::swap(Vector<T>&& other) {
