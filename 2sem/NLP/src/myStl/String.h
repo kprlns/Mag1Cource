@@ -83,6 +83,9 @@ public:
         isHashRelevant = false;
         string.set(i, val);
     }
+    T get(int i) {
+        return string[i];
+    }
     void add(T el);
     String<T>* substring(int start, int end);
     Vector<String<T>*>* split(T splitter);

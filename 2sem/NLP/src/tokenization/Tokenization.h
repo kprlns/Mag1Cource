@@ -19,7 +19,28 @@ public:
     }
 
 
+    static void countStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
+        (*totalDocs)++;
+        countStatistics(document->getTitle(), totalLength, totalTokens);
+        countStatistics(document->getText(), totalLength, totalTokens);
+    }
+
+
 private:
+    static void countStatistics(String<wchar_t>* str, int* totalLength, int* totalTokens) {
+        int size = 0;
+        for(int i = 0; i < str->getSize(); ++i) {
+            if(iswalnum(str->get(i))) {
+                size++;
+            } else if(size > 0) {
+                (*totalLength) += size;
+                (*totalTokens) += 1;
+                size = 0;
+            }
+        }
+    }
+
+
 
     static void addAllSplits(String<wchar_t>* toAdd, Vector< String<wchar_t>* >* result) {
         auto* tokens = toAdd->split(L' ');
