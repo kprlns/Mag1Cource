@@ -196,3 +196,76 @@ TEST(VectorTest, TestRemove2) {
     EXPECT_EQ(a[2], 3);
     EXPECT_EQ(a.getSize(), 3);
 }
+
+
+TEST(VectorTest, TestInsertAt) {
+    int size = 1;
+    Vector<int> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.insertAt(0, 0);
+
+    EXPECT_EQ(a[0], 0);
+    EXPECT_EQ(a[1], 1);
+    EXPECT_EQ(a[2], 2);
+    EXPECT_EQ(a[3], 3);
+    EXPECT_EQ(a[4], 4);
+    EXPECT_EQ(a.getSize(), 5);
+}
+
+TEST(VectorTest, TestInsertAt1) {
+    int size = 1;
+    Vector<int> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.insertAt(1, 0);
+
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 0);
+    EXPECT_EQ(a[2], 2);
+    EXPECT_EQ(a[3], 3);
+    EXPECT_EQ(a[4], 4);
+    EXPECT_EQ(a.getSize(), 5);
+}
+
+TEST(VectorTest, TestInsertAt2) {
+    int size = 1;
+    Vector<int> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.insertAt(3, 0);
+
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+    EXPECT_EQ(a[2], 3);
+    EXPECT_EQ(a[3], 0);
+    EXPECT_EQ(a[4], 4);
+    EXPECT_EQ(a.getSize(), 5);
+}
+
+TEST(VectorTest, TestInsertAt3) {
+    int size = 1;
+    Vector<int> a(size);
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+
+    a.insertAt(4, 0);
+
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+    EXPECT_EQ(a[2], 3);
+    EXPECT_EQ(a[3], 4);
+    EXPECT_EQ(a[4], 0);
+    EXPECT_EQ(a.getSize(), 5);
+}

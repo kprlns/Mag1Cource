@@ -92,7 +92,7 @@ public:
     void addAll(Vector<T>& other);
     void addAll(const T* array, int arraySize);
     void remove(int i);
-    void insertAt(int i, T& element);
+    void insertAt(int i, const T& element);
 
     bool operator==(Vector<T>& other);
     bool operator==(Vector<T>&& other);
@@ -110,7 +110,7 @@ public:
     T* getData() {return data;}
     Vector<T> getInterval(int start, int end);
 
-    void set(int i, T element);
+    void set(int i, const T& element);
     T& get(int i) const {return data[i];};
     const T& operator[](int i);
 
@@ -177,7 +177,7 @@ void Vector<T>::increaseCapacity(int minSize) {
 }
 
 template<typename T>
-void Vector<T>::set(int i, T el) {
+void Vector<T>::set(int i, const T& el) {
     if(i >= maxSize) {
         resize(i * 2);
     }
@@ -249,7 +249,7 @@ Vector<T> Vector<T>::getInterval(int start, int end) {
     return std::move(result);
 }
 
-// TODO tests
+
 template<typename T>
 void Vector<T>::remove(int i) {
 #ifdef VECTOR_DEBUG
@@ -266,11 +266,15 @@ void Vector<T>::remove(int i) {
 
 // TODO tests
 template<typename T>
-void Vector<T>::insertAt(int i, T& element) {
+void Vector<T>::insertAt(int i, const T& element) {
 #ifdef VECTOR_DEBUG
     logCondition(i >= maxSize, "Error: Vector out of bounds")
     logCondition(i >= size, "Warn: trying to remove element [i > size]")
 #endif
+    if(i >= size) {
+        set(i, element);
+        return;
+    }
     std::copy(data + i, data + size, data + i + 1);
     data[i] = element;
     size++;

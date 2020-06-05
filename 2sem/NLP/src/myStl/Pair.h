@@ -28,6 +28,19 @@ public:
         return key == other.getKey();
     }
 
+
+
+    int operator<(const K& other) {
+        return key < other;
+    }
+    int operator>(const K& other) {
+        return other < key;
+    }
+    int operator==(const K& other) {
+        return key == other;
+    }
+
+
     K key;
     V value;
 };
