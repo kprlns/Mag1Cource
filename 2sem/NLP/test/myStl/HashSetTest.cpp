@@ -5,7 +5,7 @@
 #include "myStl/HashSet.h"
 #include "myStl/Vector.h"
 
-TEST(HasSetTest, testBinarySearch) {
+TEST(HashSetTest, testBinarySearch) {
     auto vec = new Vector<int>(10);
     vec->add(1);
     vec->add(3);
@@ -30,7 +30,7 @@ TEST(HasSetTest, testBinarySearch) {
     //delete vec;
 }
 
-TEST(HasSetTest, testBinarySearch1) {
+TEST(HashSetTest, testBinarySearch1) {
     auto vec = new Vector<int>(10);
     vec->add(1);
     vec->add(3);
@@ -56,4 +56,25 @@ TEST(HasSetTest, testBinarySearch1) {
     std::wcout << set.binarySearch(40, &start)  << " " << start << std::endl;
     std::wcout << set.binarySearch(50, &start)  << " " << start << std::endl;
     //delete vec;
+}
+
+TEST(HashSetTest, testPut) {
+    HashSet<unsigned long long> set(32);
+    set.put(5);
+    set.put(1);
+    set.put(3);
+    set.put(2);
+    set.put(5);
+    set.put(4);
+
+    int res;
+
+    EXPECT_EQ(set.getSize(), 5);
+    EXPECT_EQ(*set.get(1, &res), 1);
+    EXPECT_EQ(*set.get(2, &res), 2);
+    EXPECT_EQ(*set.get(3, &res), 3);
+    EXPECT_EQ(*set.get(4, &res), 4);
+    EXPECT_EQ(*set.get(5, &res), 5);
+    EXPECT_EQ(*set.get(0, &res), nullptr);
+    EXPECT_EQ(*set.get(10,&res), nullptr);
 }

@@ -8,6 +8,14 @@
 
 #include "myStl/Vector.h"
 
+template <typename T>
+class HashSetItem {
+public:
+    HashSetItem() = default;
+    bool found{};
+    T item;
+};
+
 
 template <typename T> class HashSet {
 private:
@@ -57,25 +65,42 @@ public:
         delete set;
     }
 
-    T get(const T& key) {
+    HashSetItem<T> get(const T& key) {
         int posToInsert = -1;
         //return binarySearch(key, posToInsert);
-        int res = binarySearch(key, posToInsert);
+        HashSetItem<T> result;
+        int res = binarySearch(key, &posToInsert);
         if (res == -1) {
-            return nullptr;
+            result.found = false;
         } else {
-            return set[res];
+            result.found = true;
+            result.item = set->get(res);
         }
+        return result;
     }
 
-    T put(const T& key) {
+    HashSetItem<T> put(const T& key) {
         int posToInsert = -1;
-        int res = binarySearch(key, posToInsert);
+        HashSetItem<T> result;
+        result.found = true;
+        int res = binarySearch(key, &posToInsert);
         if (res == -1) {
             set->insertAt(posToInsert, key);
+            result.item = set->get(posToInsert);
+            return result;
         }
-        return set[posToInsert];
+        result.item = set->get(res);
+        return result;
     }
+
+    int getSize() {
+        return set->getSize();
+    }
+    T getAtPos(int i) {
+        return set->get(i);
+    }
+
+
 
 
 };
