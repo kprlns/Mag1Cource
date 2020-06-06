@@ -65,16 +65,68 @@ TEST(HashSetTest, testPut) {
     set.put(3);
     set.put(2);
     set.put(5);
-    set.put(4);
-
-    int res;
+    set.put(8);
 
     EXPECT_EQ(set.getSize(), 5);
-    EXPECT_EQ(*set.get(1, &res), 1);
-    EXPECT_EQ(*set.get(2, &res), 2);
-    EXPECT_EQ(*set.get(3, &res), 3);
-    EXPECT_EQ(*set.get(4, &res), 4);
-    EXPECT_EQ(*set.get(5, &res), 5);
-    EXPECT_EQ(*set.get(0, &res), nullptr);
-    EXPECT_EQ(*set.get(10,&res), nullptr);
+    EXPECT_EQ(set.get(1).item, 1);
+    EXPECT_EQ(set.get(2).item, 2);
+    EXPECT_EQ(set.get(3).item, 3);
+    EXPECT_EQ(set.get(8).item, 8);
+    EXPECT_EQ(set.get(5).item, 5);
+    EXPECT_EQ(set.get(1).found, true);
+    EXPECT_EQ(set.get(2).found, true);
+    EXPECT_EQ(set.get(3).found, true);
+    EXPECT_EQ(set.get(8).found, true);
+    EXPECT_EQ(set.get(5).found, true);
+    EXPECT_EQ(set.get(0).found, false);
+    EXPECT_EQ(set.get(10).found, false);
+    EXPECT_EQ(set.get(7).found, false);
+}
+
+TEST(HashSetTest, testPut1) {
+    HashSet<unsigned long long> set(32);
+    set.put(1);
+    set.put(2);
+    set.put(3);
+    set.put(5);
+    set.put(8);
+
+    EXPECT_EQ(set.getSize(), 5);
+    EXPECT_EQ(set.get(1).item, 1);
+    EXPECT_EQ(set.get(2).item, 2);
+    EXPECT_EQ(set.get(3).item, 3);
+    EXPECT_EQ(set.get(8).item, 8);
+    EXPECT_EQ(set.get(5).item, 5);
+    EXPECT_EQ(set.get(1).found, true);
+    EXPECT_EQ(set.get(2).found, true);
+    EXPECT_EQ(set.get(3).found, true);
+    EXPECT_EQ(set.get(8).found, true);
+    EXPECT_EQ(set.get(5).found, true);
+    EXPECT_EQ(set.get(0).found, false);
+    EXPECT_EQ(set.get(10).found, false);
+    EXPECT_EQ(set.get(7).found, false);
+}
+
+TEST(HashSetTest, testPut2) {
+    HashSet<unsigned long long> set(1);
+    set.put(8);
+    set.put(5);
+    set.put(3);
+    set.put(2);
+    set.put(1);
+
+    EXPECT_EQ(set.getSize(), 5);
+    EXPECT_EQ(set.get(1).item, 1);
+    EXPECT_EQ(set.get(2).item, 2);
+    EXPECT_EQ(set.get(3).item, 3);
+    EXPECT_EQ(set.get(8).item, 8);
+    EXPECT_EQ(set.get(5).item, 5);
+    EXPECT_EQ(set.get(1).found, true);
+    EXPECT_EQ(set.get(2).found, true);
+    EXPECT_EQ(set.get(3).found, true);
+    EXPECT_EQ(set.get(8).found, true);
+    EXPECT_EQ(set.get(5).found, true);
+    EXPECT_EQ(set.get(0).found, false);
+    EXPECT_EQ(set.get(10).found, false);
+    EXPECT_EQ(set.get(7).found, false);
 }

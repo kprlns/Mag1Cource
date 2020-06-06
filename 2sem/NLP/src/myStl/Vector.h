@@ -134,7 +134,7 @@ T* Vector<T>::allocate(int size) {
 
 template<typename T>
 void Vector<T>::add(const T& element) {
-    if(size == maxSize) {
+    if(size >= maxSize) {
         increaseCapacity();
     }
     data[size] = element;
@@ -271,10 +271,15 @@ void Vector<T>::insertAt(int i, const T& element) {
     logCondition(i >= maxSize, "Error: Vector out of bounds")
     logCondition(i >= size, "Warn: trying to remove element [i > size]")
 #endif
-    if(i >= size) {
+    if(size >= maxSize) {
+        increaseCapacity();
+    }
+    if(i > size) {
         set(i, element);
         return;
     }
+
+
     std::copy(data + i, data + size, data + i + 1);
     data[i] = element;
     size++;

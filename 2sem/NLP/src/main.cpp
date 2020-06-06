@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <parser/CorpusParser.h>
+#include <clocale>
 
 #include "myStl/String.h"
 
@@ -32,6 +33,7 @@ int main1() {
     CorpusParser parser("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGames.json");
     //Document* doc = parser.getNextDocument();
     //std::wcout << doc->getText()->operator[](0) << L"\n" << doc->getText()->operator[](doc->getText()->getSize() - 1) << L'\n';
+
     int i = 0;
     while(true) {
         Document* doc = parser.getNextDocument();

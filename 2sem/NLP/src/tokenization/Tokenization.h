@@ -19,15 +19,26 @@ public:
     }
 
 
-    static void countStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
+    static void countTokensStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
         (*totalDocs)++;
-        countStatistics(document->getTitle(), totalLength, totalTokens);
-        countStatistics(document->getText(), totalLength, totalTokens);
+        countTokenStatistics(document->getTitle(), totalLength, totalTokens);
+        countTokenStatistics(document->getText(), totalLength, totalTokens);
+    }
+
+    static void countUniqueTermStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
+        (*totalDocs)++;
     }
 
 
 private:
-    static void countStatistics(String<wchar_t>* str, int* totalLength, int* totalTokens) {
+
+    static void countUniqueTermStatistics(){
+
+    }
+
+
+
+    static void countTokenStatistics(String<wchar_t>* str, int* totalLength, int* totalTokens) {
         int size = 0;
         for(int i = 0; i < str->getSize(); ++i) {
             if(iswalnum(str->get(i))) {
@@ -39,6 +50,11 @@ private:
             }
         }
     }
+
+    static void countTermStatistics(String<wchar_t>* str, int* totalLength, int* totalTokens) {
+
+    }
+
 
 
 

@@ -10,6 +10,7 @@
 #include "tokenization/Tokenization.h"
 
 #include <wctype.h>
+#include <clocale>
 
 struct DelimeterInteger : std::numpunct<wchar_t> {
     wchar_t do_thousands_sep() const { return L'\u200c'; }
@@ -28,7 +29,7 @@ void calcTokenizationStatistics(const char* filename) {
         if(document == nullptr) {
             break;
         }
-        Tokenization::countStatistics(document, &totalLength, &totalTokens, &totalDocs);
+        Tokenization::countTokensStatistics(document, &totalLength, &totalTokens, &totalDocs);
     }
     auto end = std::chrono::steady_clock::now();
 
@@ -84,6 +85,13 @@ int main() {
     std::wcin.imbue(std::locale("en_US.UTF-8"));
     std::wcout.imbue(std::locale("en_US.UTF-8"));
     std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+
+    String<wchar_t>* testStr = new String(L"A~b.– \"n' C-d123,e.f?g![]АБВГДабвгд↑/\n");
+    for(int i = 0; i < testStr->getSize(); ++i) {
+        std::wcout << (wchar_t)towlower(testStr->get(i));
+    }
+    return 0;
+
 
     //"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json"
     calcTokenizationStatistics("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
