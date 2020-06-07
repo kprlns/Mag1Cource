@@ -24,12 +24,20 @@ void calcTokenizationStatistics(const char* filename) {
     int totalDocs = 0;
     CorpusParser parser(filename);
     auto start = std::chrono::steady_clock::now();
+    int cnt = 0;
     while (true) {
+        cnt++;
         Document *document = parser.getNextDocument();
         if(document == nullptr) {
             break;
         }
-        Tokenization::countTokensStatistics(document, &totalLength, &totalTokens, &totalDocs);
+        //79,129,329
+        //40,331,459
+        Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
+        if(cnt % 100000 == 0) {
+            //std::wcout << cnt << std::endl;
+            break;
+        }
     }
     auto end = std::chrono::steady_clock::now();
 
@@ -77,7 +85,7 @@ void calcHonestTokenizationStatistics(const char* filename) {
 }
 
 
-int main() {
+int main_lab1_nlp() {
     std::setlocale(LC_ALL,"");
     std::locale::global(std::locale("en_US.UTF-8") );
     std::ios_base::sync_with_stdio(false);
@@ -86,15 +94,9 @@ int main() {
     std::wcout.imbue(std::locale("en_US.UTF-8"));
     std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
 
-    String<wchar_t>* testStr = new String(L"A~b.– \"n' C-d123,e.f?g![]АБВГДабвгд↑/\n");
-    for(int i = 0; i < testStr->getSize(); ++i) {
-        std::wcout << (wchar_t)towlower(testStr->get(i));
-    }
-    return 0;
-
-
     //"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json"
-    calcTokenizationStatistics("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    calcTokenizationStatistics("/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    return 0;
 }
 
 /*

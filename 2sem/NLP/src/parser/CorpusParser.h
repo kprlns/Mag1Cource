@@ -11,6 +11,7 @@
 
 #include "dto/Document.h"
 #include "parser/ParserUtils.h"
+#include "Common.h"
 
 // /Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataMusic.json
 class CorpusParser {
@@ -20,6 +21,11 @@ public:
         cntLine = 0;
         init();
     }
+
+    pos_type getPosition() {
+        return input.tellg();
+    }
+
 
     Document* getNextDocument() {
         auto document = new Document();
@@ -33,7 +39,8 @@ public:
             }
             std::getline(input, tmpString, L'\n');
             cntLine++;
-            //std::wcout << cntLine << std::endl;
+            std::wcout << tmpString << std::endl;
+            std::wcout << cntLine << std::endl;
             String<wchar_t> line(tmpString.data(), tmpString.length());
             if(line == L"}") {
                 delete document;

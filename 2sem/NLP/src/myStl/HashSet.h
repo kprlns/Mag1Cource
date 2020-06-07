@@ -24,13 +24,13 @@ private:
 public:
     //Returns position to insert if not exists otherwise position
     int binarySearch(const T& key, int* positionToInsert) {
-        std::wcout << "\n-----------" << key << "----------------\n";
+        //std::wcout << "\n-----------" << key << "----------------\n";
         int start = 0;
         int end = set->getSize() - 1;
         int mid;
         while (start <= end) {
             mid = start + (end - start) / 2;
-            std::wcout << "[ " << start << "  " << end << " ]\n";
+            //std::wcout << "[ " << start << "  " << end << " ]\n";
 
             if(set->get(mid) == key) {
                 return mid;
@@ -42,7 +42,7 @@ public:
                 end = mid - 1;
             }
         }
-        std::wcout << "{ " << start << "  " << end << " }\n";
+        //std::wcout << "{ " << start << "  " << end << " }\n";
         (*positionToInsert) = start;
         return -1;
     }
@@ -57,9 +57,10 @@ public:
         this->set = set;
     }
     void deleteAll() {
-        for(int i = 0; i < set->getSize(); ++i) {
-            delete set->get(i);
-        }
+        //for(int i = 0; i < set->getSize(); ++i) {
+        //    delete set->get(i);
+        //}
+        set->deleteAll();
     }
     ~HashSet() {
         delete set;
@@ -96,6 +97,7 @@ public:
     int getSize() {
         return set->getSize();
     }
+
     T getAtPos(int i) {
         return set->get(i);
     }

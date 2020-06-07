@@ -7,6 +7,7 @@
 
 #include "myStl/Vector.h"
 #include "myStl/String.h"
+#include "myStl/HashSet.h"
 #include "dto/Document.h"
 
 class Tokenization {
@@ -18,7 +19,6 @@ public:
         return result;
     }
 
-
     static void countTokensStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
         (*totalDocs)++;
         countTokenStatistics(document->getTitle(), totalLength, totalTokens);
@@ -27,13 +27,53 @@ public:
 
     static void countUniqueTermStatistics(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
         (*totalDocs)++;
+
+        auto hashes = new HashSet<unsigned long long>(512);
+        countUniqueTermStatistics(document->getTitle(), totalLength, hashes);
+        countUniqueTermStatistics(document->getText(), totalLength, hashes);
+
+        (*totalTokens) += hashes->getSize();
+        delete hashes;
+    }
+
+    static HashSet<unsigned long long>* getDocumentTermHashes(Document* document) {
+        auto hashes = new HashSet<unsigned long long>(512);
+        int tmp = 0;
+        countUniqueTermStatistics(document->getTitle(), &tmp, hashes);
+        countUniqueTermStatistics(document->getText(), &tmp, hashes);
+
+        return hashes;
     }
 
 
 private:
+    static const unsigned long long INITIAL_HASH_VALUE = 5381;
 
-    static void countUniqueTermStatistics(){
+    static void countUniqueTermStatistics(
+            String<wchar_t>* str, int* totalLength, HashSet<unsigned long long>* hashes) {
+        if(str == nullptr) {
+            return;
+        }
+        int size = 0;
+        unsigned long long hash = INITIAL_HASH_VALUE;
+        for(int i = 0; i < str->getSize(); ++i) {
+            wchar_t currentChar = str->get(i);
+            if(iswalnum(currentChar)) {
+                size++;
+                hash = djb2(hash, towlower(currentChar));
+                std::wcout << currentChar;
+            } else if(size > 0) {
+                (*totalLength) += size;
+                size = 0;
+                hashes->put(hash);
+                std::wcout << " " << hash << std::endl;
+                hash = INITIAL_HASH_VALUE;
+            }
+        }
+    }
 
+    static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c) {
+        return (currentHash << 13) + (currentHash << 5) + currentHash + c;
     }
 
 

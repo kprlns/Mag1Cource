@@ -12,6 +12,10 @@ public:
         this->key = key;
         this->value = value;
     }
+    Pair(K key, V value) {
+        this->key = key;
+        this->value = value;
+    }
 
     K getKey() const { return key; }
     V getValue() const { return value; }
