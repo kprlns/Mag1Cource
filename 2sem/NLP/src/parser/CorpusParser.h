@@ -39,8 +39,8 @@ public:
             }
             std::getline(input, tmpString, L'\n');
             cntLine++;
-            std::wcout << tmpString << std::endl;
-            std::wcout << cntLine << std::endl;
+            //std::wcout << cntLine << std::endl;
+            //std::wcout << tmpString << std::endl;
             String<wchar_t> line(tmpString.data(), tmpString.length());
             if(line == L"}") {
                 delete document;

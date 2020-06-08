@@ -5,6 +5,8 @@
 #ifndef NLP_INDEXER_H
 #define NLP_INDEXER_H
 
+#include <chrono>
+
 #include "tokenization/Tokenization.h"
 #include "dto/Index.h"
 #include "parser/CorpusParser.h"

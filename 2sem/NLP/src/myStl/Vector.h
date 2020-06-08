@@ -112,6 +112,7 @@ public:
 
     void set(int i, const T& element);
     T& get(int i) const {return data[i];};
+    T* getPointer(int i) { return data + i; }
     const T& operator[](int i);
 
     void swap(Vector<T>&& other);

@@ -70,6 +70,13 @@ private:
                 hash = INITIAL_HASH_VALUE;
             }
         }
+        if(size > 0) {
+            (*totalLength) += size;
+            size = 0;
+            hashes->put(hash);
+            std::wcout << " " << hash << std::endl;
+            hash = INITIAL_HASH_VALUE;
+        }
     }
 
     static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c) {
@@ -90,13 +97,6 @@ private:
             }
         }
     }
-
-    static void countTermStatistics(String<wchar_t>* str, int* totalLength, int* totalTokens) {
-
-    }
-
-
-
 
     static void addAllSplits(String<wchar_t>* toAdd, Vector< String<wchar_t>* >* result) {
         auto* tokens = toAdd->split(L' ');

@@ -22,17 +22,15 @@ public:
     void setKey(K newKey) { key = newKey; }
     void setValue(V newValue) { value = newValue; }
 
-    int operator<(const Pair<K,V>& other) {
+    int operator<(Pair<K,V>& other) {
         return key < other.getKey();
     }
-    int operator>(const Pair<K,V>& other) {
+    int operator>(Pair<K,V>& other) {
         return other.getKey() < key;
     }
-    int operator==(const Pair<K,V>& other) {
+    int operator==(Pair<K,V>& other) {
         return key == other.getKey();
     }
-
-
 
     int operator<(const K& other) {
         return key < other;
@@ -44,9 +42,29 @@ public:
         return key == other;
     }
 
+    bool lessThen(Pair<K,V>& other) {
+        return key < other.key;
+    }
+    bool greaterThen(Pair<K,V>& other) {
+        return key > other.key;
+    }
+    bool equals(Pair<K,V>& other) {
+        return key == other.key;
+    }
+    bool lessThen(Pair<K,V>* other) {
+        return key < other->key;
+    }
+    bool greaterThen(Pair<K,V>* other) {
+        return key > other->key;
+    }
+    bool equals(Pair<K,V>* other) {
+        return key == other->key;
+    }
 
     K key;
     V value;
+
+
 };
 
 #endif //NLP_PAIR_H

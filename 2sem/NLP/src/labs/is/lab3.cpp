@@ -5,15 +5,15 @@
 #include <index/Indexer.h>
 
 int main() {
-    String<wchar_t>* testStr = new String(L"a~b.– n' c-d,e.f?g![]АБВГДабвгд↑/\n");
-    for(int i = 0; i < testStr->getSize(); ++i) {
-        std::wcout << i << " ";
-        std::wcout << (*testStr)[i] << L" " << (unsigned long long) (*testStr)[i] << ": " << std::boolalpha
-                   << (iswalnum((*testStr)[i]) != 0) << std::endl;
-    }
-    return 0;
+    std::setlocale(LC_ALL,"");
+    std::locale::global(std::locale("en_US.UTF-8") );
+    std::ios_base::sync_with_stdio(false);
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::wcin.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale("en_US.UTF-8"));
 
-    Index* index = Indexer().indexFile("/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
+
+    Index* index = Indexer().indexFile("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1.json");
     index->printIndex();
     return 0;
 }

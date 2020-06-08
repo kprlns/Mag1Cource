@@ -36,7 +36,7 @@ void calcTokenizationStatistics(const char* filename) {
         Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
         if(cnt % 100000 == 0) {
             //std::wcout << cnt << std::endl;
-            break;
+            //break;
         }
     }
     auto end = std::chrono::steady_clock::now();
@@ -84,8 +84,8 @@ void calcHonestTokenizationStatistics(const char* filename) {
 
 }
 
+int main_nlp_lab1() {
 
-int main_lab1_nlp() {
     std::setlocale(LC_ALL,"");
     std::locale::global(std::locale("en_US.UTF-8") );
     std::ios_base::sync_with_stdio(false);
@@ -95,7 +95,7 @@ int main_lab1_nlp() {
     std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
 
     //"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json"
-    calcTokenizationStatistics("/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    calcTokenizationStatistics("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
     return 0;
 }
 

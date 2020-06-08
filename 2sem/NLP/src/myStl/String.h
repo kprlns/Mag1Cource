@@ -17,7 +17,7 @@ template <typename T> class String {
 public:
     String() {}//string = Vector<T>(128);
     String(int size) : string(size) {}//string = Vector<T>(128);
-    explicit String(const T* str) : string(wcslen(str)) {
+    explicit String(const T* str) : string(std::char_traits<T>::length(str)) {
         int size = string.getMaxSize();
         string.addAll(str, size);
     }

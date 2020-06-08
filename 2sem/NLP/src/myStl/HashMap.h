@@ -1,29 +1,29 @@
 //
-// Created by kprlns on 05.06.2020.
+// Created by kprlns on 08.06.2020.
 //
 
-#ifndef NLP_HASHSET_H
-#define NLP_HASHSET_H
-
+#ifndef NLP_HASHMAP_H
+#define NLP_HASHMAP_H
 
 #include "myStl/Vector.h"
+#include "myStl/Pair.h"
 
-template <typename T>
-class HashSetItem {
+template <typename K, typename V>
+class HashMapItem {
 public:
-    HashSetItem() = default;
+    HashMapItem() = default;
     bool found{};
-    T item;
+    Pair<K,V>* item;
 };
 
 
-template <typename T> class HashSet {
+template <typename K, typename V> class HashMap {
 private:
-    Vector<T>* set;
+    Vector<Pair<K,V>*>* set;
 
 public:
     //Returns position to insert if not exists otherwise position
-    int binarySearch(const T& key, int* positionToInsert) {
+    int binarySearch(const K &key, int *positionToInsert) {
         //std::wcout << "\n-----------" << key << "----------------\n";
         int start = 0;
         int end = set->getSize() - 1;
@@ -32,11 +32,11 @@ public:
             mid = start + (end - start) / 2;
             //std::wcout << "[ " << start << "  " << end << " ]\n";
 
-            if(set->get(mid) == key) {
+            if (set->get(mid)->key == key) {
                 return mid;
             }
 
-            if(set->get(mid) < key) {
+            if (set->get(mid)->key < key) {
                 start = mid + 1;
             } else {
                 end = mid - 1;
@@ -47,13 +47,11 @@ public:
         return -1;
     }
 
-
-
-
-    explicit HashSet(int size) {
-        set = new Vector<T>(size);
+    explicit HashMap(int size) {
+        set = new Vector<Pair<K, V>*>(size);
     }
-    explicit HashSet(Vector<T>* set) {
+
+    explicit HashMap(Vector<Pair<K, V>*> set) {
         this->set = set;
     }
     void deleteAll() {
@@ -62,14 +60,16 @@ public:
         //}
         set->deleteAll();
     }
-    ~HashSet() {
+
+    ~HashMap() {
+        deleteAll();
         delete set;
     }
 
-    HashSetItem<T> get(const T& key) {
+    HashMapItem<K,V> get(const K &key) {
         int posToInsert = -1;
         //return binarySearch(key, posToInsert);
-        HashSetItem<T> result;
+        HashMapItem<K,V> result;
         int res = binarySearch(key, &posToInsert);
         if (res == -1) {
             result.found = false;
@@ -80,13 +80,14 @@ public:
         return result;
     }
 
-    HashSetItem<T> put(const T& key) {
+    HashMapItem<K,V> put(const K &key, const V& value) {
         int posToInsert = -1;
-        HashSetItem<T> result;
+        HashMapItem<K,V> result;
         result.found = true;
         int res = binarySearch(key, &posToInsert);
         if (res == -1) {
-            set->insertAt(posToInsert, key);
+
+            set->insertAt(posToInsert, new Pair<K, V>(key, value));
             result.item = set->get(posToInsert);
             return result;
         } else {
@@ -100,14 +101,21 @@ public:
         return set->getSize();
     }
 
-    T getAtPos(int i) {
+    Pair<K,V>* getAtPos(int i) {
         return set->get(i);
     }
 
-
-
-
 };
 
-#endif //NLP_HASHSET_H
+/*
 
+
+
+
+
+
+ */
+
+
+
+#endif //NLP_HASHMAP_H
