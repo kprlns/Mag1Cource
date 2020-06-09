@@ -25,12 +25,18 @@ public:
     pos_type getPosition() {
         return input.tellg();
     }
+    void testSetPosition(pos_type position) {
+        input.seekg(position);
+        std::wstring tmp;
+        return;
+    }
 
 
     Document* getNextDocument() {
         auto document = new Document();
         //String<wchar_t>*
         bool isDocumentPresent = true;
+        document->setPosition(input.tellg());
         for(int i = 0; i < 3; ++i) {
             std::wstring tmpString;
             if(input.eof() || input.bad()) {

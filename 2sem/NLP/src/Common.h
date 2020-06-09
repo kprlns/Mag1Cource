@@ -7,7 +7,12 @@
 
 #include <ios>
 
-using pos_type = std::ios::pos_type;
+struct DelimeterInteger : std::numpunct<wchar_t> {
+    wchar_t do_thousands_sep() const { return L'\u200c'; }
+    std::string do_grouping() const { return "~"; }
+};
+
+using pos_type = std::wstreampos ;
 
 
 

@@ -150,7 +150,7 @@ String<T> String<T>::operator+(String<T>& other) {
 template<typename C>
 std::ostream & operator<<(std::ostream& out, const String<C>& str) {
     for(int i = 0; i < str.getSize(); ++i) {
-        out << str[i];
+        out << (C)(str[i]);
     }
     return out;
 }
@@ -158,7 +158,7 @@ std::ostream & operator<<(std::ostream& out, const String<C>& str) {
 template<typename C>
 std::wostream& operator<<(std::wostream & out, const String<C>& str) {
     for(int i = 0; i < str.getSize(); ++i) {
-        out << str[i];
+        out << (C)(str[i]);
     }
     return out;
 }

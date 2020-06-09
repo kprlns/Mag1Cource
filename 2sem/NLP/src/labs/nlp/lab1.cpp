@@ -7,15 +7,12 @@
 #include <locale>
 
 #include "parser/CorpusParser.h"
+#include "Common.h"
 #include "tokenization/Tokenization.h"
 
 #include <wctype.h>
 #include <clocale>
 
-struct DelimeterInteger : std::numpunct<wchar_t> {
-    wchar_t do_thousands_sep() const { return L'\u200c'; }
-    std::string do_grouping() const { return "~"; }
-};
 
 
 void calcTokenizationStatistics(const char* filename) {

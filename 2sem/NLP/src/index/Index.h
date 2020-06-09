@@ -10,7 +10,7 @@
 #include "myStl/Pair.h"
 #include "myStl/Vector.h"
 #include "Common.h"
-
+#include <bitset>
 
 class Index {
 public:
@@ -22,9 +22,12 @@ public:
         index = new HashMap<unsigned long long, Vector<int>*>(100000);
         docPositions = new Vector<pos_type>(108000);
     }
+    Index(unsigned long long size) {
+        index = new HashMap<unsigned long long, Vector<int>*>(size);
+        docPositions = new Vector<pos_type>(1);
+    }
     ~Index() {
         delete docPositions;
-        index->deleteAll();
         delete index;
     }
 
@@ -47,12 +50,15 @@ public:
     void printIndex() {
         for(int i = 0; i < index->getSize(); ++i) {
             auto pair = index->getAtPos(i);
+            std::wcout << std::bitset<64>(pair->key) << " ";
             std::wcout << pair->key << " : ";
             for(int j = 0; j < pair->value->getSize(); ++j) {
                 std::wcout << pair->value->get(j) << " ";
             }
             std::wcout << std::endl;
         }
+    }
+    void printPositions() {
         std::wcout << "\n----------------------\n";
         for(int i = 0; i < docPositions->getSize(); ++i) {
             std::wcout << docPositions->get(i) << " ";
