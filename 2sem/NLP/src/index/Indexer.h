@@ -9,7 +9,7 @@
 
 #include "tokenization/Tokenization.h"
 #include "Index.h"
-#include "dto/BucketIndex.h"
+#include "BucketIndex.h"
 #include "parser/CorpusParser.h"
 #include <vector>
 #include <algorithm>
@@ -32,7 +32,7 @@ public:
             //40,331,459
             //Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
             auto hashes = Tokenization::getDocumentTermHashes(document);
-            index->putAll(hashes, cnt, document->getPosition());
+            index->putAll(hashes, cnt - 1, document->getPosition());
             delete hashes;
             if(cnt % 1000 == 0) {
                 std::wcout << cnt << std::endl;
@@ -67,6 +67,7 @@ public:
             auto hashes = Tokenization::getDocumentTermHashes(document);
             index->putAll(hashes, cnt - 1, document->getPosition());
             delete hashes;
+            index->putTitleForwardIndex(Tokenization::getStringTermHashes(document->getTitle()));
             if(cnt % 1000 == 0) {
                 std::wcout << cnt << std::endl;
                 //break;

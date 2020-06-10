@@ -14,7 +14,7 @@ set(MY_SRC
         tokenization/Tokenization.h
         parser/ParserUtils.h
         myStl/Pair.h
-        myStl/HashSet.h dto/BucketIndex.h index/IndexSaver.h)
+        myStl/HashSet.h index/BucketIndex.h index/IndexSaver.h index/IndexLoader.h labs/is/lab4.cpp)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
 add_executable(${BINARY}_run_is_lab3 ${SOURCES} labs/is/lab3.cpp ${MY_SRC})

@@ -9,6 +9,7 @@
 #include "index/IndexSaver.h"
 
 int main() {
+    auto start = std::chrono::steady_clock::now();
 
     std::setlocale(LC_ALL, "");
     std::locale::global(std::locale("en_US.UTF-8"));
@@ -32,9 +33,13 @@ int main() {
     BucketIndexSaver().save(
             "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
             "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1",
             bucketIndex
     );
+    //bucketIndex->printAll();
     delete bucketIndex;
+    auto end = std::chrono::steady_clock::now();
+    std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
     return 0;
 }
 

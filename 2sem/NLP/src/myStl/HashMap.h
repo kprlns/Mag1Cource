@@ -18,7 +18,7 @@ public:
 
 
 template <typename K, typename V> class HashMap {
-private:
+public:
     Vector<Pair<K,V>*>* set;
 
 public:

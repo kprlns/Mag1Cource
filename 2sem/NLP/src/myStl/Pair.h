@@ -8,10 +8,12 @@
 
 template <typename K, typename V> class Pair {
 public:
+    /*
     Pair(K& key, V& value) {
         this->key = key;
         this->value = value;
     }
+     */
     Pair(K key, V value) {
         this->key = key;
         this->value = value;

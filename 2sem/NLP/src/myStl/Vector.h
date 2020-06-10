@@ -115,6 +115,10 @@ public:
     T* getPointer(int i) { return data + i; }
     const T& operator[](int i);
 
+    /// be careful
+    void setSize(int size) {
+        this->size = size;
+    }
     void swap(Vector<T>&& other);
 private:
     T* data;

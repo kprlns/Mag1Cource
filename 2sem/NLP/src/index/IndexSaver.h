@@ -8,26 +8,54 @@
 #include "index/Index.h"
 
 #include <fstream>
-#include <dto/BucketIndex.h>
+#include <index/BucketIndex.h>
+
+#define writeFile(file, a) ((file).write((char*)(&(a)), sizeof(a)))
 
 class BucketIndexSaver {
 public:
 
-    void save(char* filenameIndex, char* filenamePositions, BucketIndex* index) {
+
+    void save(char* filenameIndex, char* filenamePositions,
+            char* filenameTitleForwardIndex, BucketIndex* index) {
+
         auto start = std::chrono::steady_clock::now();
         auto flags = std::ofstream::out | std::ofstream::trunc | std::ofstream::binary;
-        std::wofstream fileIndex = std::wofstream(filenameIndex, flags);
-        std::wofstream filePositions = std::wofstream(filenamePositions, flags);
+        std::ofstream fileIndex = std::ofstream(filenameIndex, flags);
+        std::ofstream filePositions = std::ofstream(filenamePositions, flags);
+        std::ofstream fileTitleForwardIndex = std::ofstream(filenameTitleForwardIndex, flags);
 
-        for(int i = 0; i < index->indexBuckets->getSize(); ++i) {
+        //index
+        int indexSize = index->getSize();
+        fileIndex.write((char*)&indexSize, sizeof(indexSize));
+        for(int i = 0; i < index->numOfBuckets; ++i) {
             saveOne(fileIndex, index->indexBuckets->get(i));
         }
-        for(int i = 0; i < index->docPositions->getSize(); ++i) {
-            filePositions << index->docPositions->get(i);
+
+
+        //positions of documents in original file
+        //filePositions << index->docPositions->getSize();
+        int sizePositions = index->docPositions->getSize();
+        filePositions.write((char*)&sizePositions, sizeof(sizePositions));
+        filePositions.write((char*)index->docPositions->getData(),
+                sizeof(index->docPositions->get(0)) * sizePositions);
+
+
+        //title forward index
+        int titleIndexSize = index->titleForwardIndex->getSize();
+        fileTitleForwardIndex.write((char*)&titleIndexSize, sizeof(titleIndexSize));
+        for(int i = 0; i < titleIndexSize; ++i) {
+            auto current = index->titleForwardIndex->get(i);
+            int currSize = current->getSize();
+            fileTitleForwardIndex.write((char*)&currSize, sizeof(currSize));
+            fileTitleForwardIndex.write((char*)current->set->getData(),
+                    sizeof(current->getAtPos(0)) * currSize);
         }
+
 
         fileIndex.close();
         filePositions.close();
+        fileTitleForwardIndex.close();
         auto end = std::chrono::steady_clock::now();
         std::wcout << L"Save time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
@@ -35,13 +63,14 @@ public:
 
 private:
 
-    void saveOne(std::wofstream& fileIndex, Index* index) {
+    void saveOne(std::ofstream& fileIndex, Index* index) {
         for(int i = 0; i < index->index->getSize(); ++i) {
             auto item = index->index->getAtPos(i);
-            fileIndex << item->key << item->value->getSize();
-            for(int j = 0; j < item->value->getSize(); ++j) {
-                fileIndex << item->value->get(j);
-            }
+            fileIndex.write((char*)&(item->key), sizeof(item->key));
+            int itemValSize = item->value->getSize();
+            fileIndex.write((char*)&itemValSize, sizeof(itemValSize));
+            fileIndex.write((char*)item->value->getData(),
+                    sizeof(item->value->get(0)) * itemValSize);
         }
     }
 

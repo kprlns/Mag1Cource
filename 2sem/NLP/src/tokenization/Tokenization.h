@@ -39,13 +39,18 @@ public:
     static HashSet<unsigned long long>* getDocumentTermHashes(Document* document) {
         auto hashes = new HashSet<unsigned long long>(512);
         int tmp = 0;
+
         countUniqueTermStatistics(document->getTitle(), &tmp, hashes);
         countUniqueTermStatistics(document->getText(), &tmp, hashes);
 
         return hashes;
     }
-
-
+    static HashSet<unsigned long long>* getStringTermHashes(String<wchar_t>* string) {
+        auto hashes = new HashSet<unsigned long long>(512);
+        int tmp = 0;
+        countUniqueTermStatistics(string, &tmp, hashes);
+        return hashes;
+    }
 private:
 
     static void countUniqueTermStatistics(

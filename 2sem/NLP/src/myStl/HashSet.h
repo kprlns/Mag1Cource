@@ -18,7 +18,7 @@ public:
 
 
 template <typename T> class HashSet {
-private:
+public:
     Vector<T>* set;
 
 public:
@@ -104,6 +104,10 @@ public:
         return set->get(i);
     }
 
+    /// use very carefully
+    int addInTheEndOfSetArray(T element) {
+        set->add(element);
+    }
 
 
 
