@@ -113,6 +113,7 @@ public:
     void set(int i, const T& element);
     T& get(int i) const {return data[i];};
     T* getPointer(int i) { return data + i; }
+    T& getLast() { return data[size - 1]; }
     const T& operator[](int i);
 
     /// be careful

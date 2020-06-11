@@ -9,6 +9,7 @@
 #include "myStl/String.h"
 #include "myStl/HashSet.h"
 #include "dto/Document.h"
+#include "Common.h"
 
 class Tokenization {
 public:
@@ -83,16 +84,7 @@ private:
         }
     }
 
-    static const unsigned long long INITIAL_HASH_VALUE = 5381;
-    static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c) {
-        return
-        (currentHash << 53)
-        + (currentHash << 29)
-        + (currentHash << 13)
-        + (currentHash << 5)
-        + currentHash
-        + c;
-    }
+
     static inline unsigned long long fnv64(unsigned long long currentHash, wchar_t c) {
         currentHash *= 0x100000001b3;
         currentHash &= 0xffffffffffffffff;

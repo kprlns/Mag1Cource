@@ -15,5 +15,17 @@ struct DelimeterInteger : std::numpunct<wchar_t> {
 using pos_type = std::wstreampos ;
 
 
+static const unsigned long long INITIAL_HASH_VALUE = 5381;
+static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c) {
+    return
+            (currentHash << 53)
+            + (currentHash << 29)
+            + (currentHash << 13)
+            + (currentHash << 5)
+            + currentHash
+            + c;
+}
+
+
 
 #endif //NLP_COMMON_H
