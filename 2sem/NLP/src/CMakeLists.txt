@@ -14,7 +14,10 @@ set(MY_SRC
         tokenization/Tokenization.h
         parser/ParserUtils.h
         myStl/Pair.h
-        myStl/HashSet.h index/BucketIndex.h index/IndexSaver.h index/IndexLoader.h labs/is/lab4.cpp dto/Query.h dto/QueryItem.h parser/QueryParser.h)
+        myStl/HashSet.h
+        index/BucketIndex.h index/IndexSaver.h index/IndexLoader.h
+        labs/is/lab4.cpp
+        query/Query.h query/QueryItem.h query/QueryParser.h query/QueryProcessor.h)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
 add_executable(${BINARY}_run_is_lab3 ${SOURCES} labs/is/lab3.cpp ${MY_SRC})

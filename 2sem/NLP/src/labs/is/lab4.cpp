@@ -4,6 +4,8 @@
 
 #include <index/Indexer.h>
 #include <climits>
+#include <clocale>
+#include <locale>
 
 #include "parser/CorpusParser.h"
 #include "index/IndexLoader.h"

@@ -6,6 +6,7 @@
 #define NLP_COMMON_H
 
 #include <ios>
+#include <clocale>
 
 struct DelimeterInteger : std::numpunct<wchar_t> {
     wchar_t do_thousands_sep() const { return L'\u200c'; }
@@ -26,6 +27,15 @@ static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c)
             + c;
 }
 
+void setLocale() {
+    std::setlocale(LC_ALL, "");
+    std::locale::global(std::locale("en_US.UTF-8"));
+    std::ios_base::sync_with_stdio(false);
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::wcin.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+}
 
 
 #endif //NLP_COMMON_H

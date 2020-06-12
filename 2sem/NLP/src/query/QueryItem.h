@@ -8,6 +8,7 @@
 #include "myStl/String.h"
 
 enum QueryItemEnum {
+
     OPEN_PARENTHESIS,
     CLOSE_PARENTHESIS,
 
@@ -46,6 +47,27 @@ public:
         return operandHash;
     }
 
+    bool isNot(QueryItemEnum other) {
+        return itemType != other;
+    }
+    bool is(QueryItemEnum other) {
+        return itemType == other;
+    }
+
+    int getPriority() {
+        if(itemType == OR_OPERATOR) {
+            return 1;
+        }
+        else if (itemType == AND_OPERATOR) {
+            return 2;
+        }
+        else if(itemType == NEGATE_OPERATOR) {
+            return 3;
+        }
+        else {
+            return 0;
+        }
+    }
 };
 
 #endif //NLP_QUERYITEM_H

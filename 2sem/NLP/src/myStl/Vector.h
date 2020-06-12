@@ -114,7 +114,19 @@ public:
     T& get(int i) const {return data[i];};
     T* getPointer(int i) { return data + i; }
     T& getLast() { return data[size - 1]; }
+    T& getFirst() { return data[0]; }
     const T& operator[](int i);
+
+    void clear() {
+        setSize(0);
+    }
+    T popBack() {
+        size--;
+        return data[size];
+    }
+    bool isEmpty() {
+        return size == 0;
+    }
 
     /// be careful
     void setSize(int size) {

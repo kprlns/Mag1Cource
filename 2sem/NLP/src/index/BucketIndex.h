@@ -61,6 +61,10 @@ public:
         indexBuckets->get(bucket)->putOne(hash, docId);
     }
 
+    HashMapItem<unsigned long long, Vector<int>*> get(unsigned long long hash) {
+        return indexBuckets->get(getBucketIndex(hash))->get(hash);
+    }
+
     void printIndex() {
         for(int i = 0; i < indexBuckets->getSize(); ++i) {
             indexBuckets->get(i)->printIndex();

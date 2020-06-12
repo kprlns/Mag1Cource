@@ -4,11 +4,13 @@
 
 #include <index/Indexer.h>
 #include <climits>
+#include <locale>
+#include <clocale>
 
 #include "parser/CorpusParser.h"
 #include "index/IndexSaver.h"
 
-int main() {
+int main__lab3() {
     auto start = std::chrono::steady_clock::now();
 
     std::setlocale(LC_ALL, "");

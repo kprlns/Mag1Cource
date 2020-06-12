@@ -47,6 +47,10 @@ public:
         setItem.item->value->add(docId);
     }
 
+    HashMapItem<unsigned long long, Vector<int>*> get(unsigned long long hash) {
+        return index->get(hash);
+    }
+
     void printIndex() {
         for(int i = 0; i < index->getSize(); ++i) {
             auto pair = index->getAtPos(i);
