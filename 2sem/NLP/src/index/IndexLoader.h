@@ -18,6 +18,9 @@ public:
     BucketIndex* load(char* filenameIndex, char* filenamePositions, char* filenameTitleForwardIndex) {
         auto flags = std::ifstream::binary | std::ifstream::in;
         BucketIndex* index = new BucketIndex();
+        index->reverseIndexFilePath = filenameIndex;
+        index->positionFilePath = filenamePositions;
+        index->titleIndexFilePath = filenameTitleForwardIndex;
 
         loadIndex(filenameIndex, index, flags);
         loadPositions(filenamePositions, index, flags);

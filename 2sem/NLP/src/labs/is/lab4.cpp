@@ -6,12 +6,50 @@
 #include <climits>
 #include <clocale>
 #include <locale>
+#include <query/FileQueriesProcessor.h>
 
 #include "parser/CorpusParser.h"
 #include "index/IndexLoader.h"
+#include "query/QueryService.h"
+#include "Common.h"
 
-int main_is() {
+void setLocale() {
     std::setlocale(LC_ALL, "");
+    std::locale::global(std::locale("en_US.UTF-8"));
+    std::ios_base::sync_with_stdio(false);
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::wcin.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+}
+
+int main() {
+    setLocale();
+
+    BucketIndex *bucketIndex = Indexer().bucketIndexFile(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
+    //bucketIndex->printAll();
+    //bucketIndex->printPositions();
+    //QueryService queryService = QueryService(bucketIndex);
+    //std::wcout << L"**************************************\n";
+    //Vector<int>* res = queryService.processStringQuery(L"!ущвщ в тылу | сОн");
+    //for(int i = 0; i < res->getSize(); ++i) {
+    //    std::wcout << i << L" ";
+    //}
+    FileQueriesProcessor fqp;
+    fqp.performAllFromFile(bucketIndex, "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/queries.txt");
+
+
+    std::wcout << std::endl;
+    //delete res;
+
+    delete bucketIndex;
+    return 0;
+}
+
+/*
+
+     std::setlocale(LC_ALL, "");
     std::locale::global(std::locale("en_US.UTF-8"));
     std::ios_base::sync_with_stdio(false);
     std::setlocale(LC_ALL, "en_US.UTF-8");
@@ -36,7 +74,10 @@ int main_is() {
     delete bucketIndex;
 
     return 0;
-}
+ */
+
+
+
 /*
         auto f = std::ifstream("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/indexTest", std::ios::binary);
     if ( (f.rdstate() & std::ifstream::failbit ) != 0 )

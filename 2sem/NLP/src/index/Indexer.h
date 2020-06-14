@@ -52,6 +52,7 @@ public:
 
     BucketIndex* bucketIndexFile(char* filename) {
         BucketIndex* index = new BucketIndex();
+        index->originFilePath = filename;
         CorpusParser parser(filename);
         auto start = std::chrono::steady_clock::now();
         int cnt = 0;
@@ -77,20 +78,20 @@ public:
         auto end = std::chrono::steady_clock::now();
 
         //std::wcout << L"Total length: " << totalLength << L"\n";
-        std::wcout << L"Total tokens: " << index->getSize() << L"\n";
+        //std::wcout << L"Total tokens: " << index->getSize() << L"\n";
         //std::wcout << L"Total docs: " << totalDocs << L"\n";
         //std::wcout.imbue(std::locale())
-        std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+        //std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
         std::vector<int> sz;
         for(int i = 0; i < index->indexBuckets->getSize(); ++i) {
             sz.push_back(index->indexBuckets->get(i)->index->getSize());
         }
-        std::sort(sz.begin(), sz.end());
-        std::wcout << L"Min bucket size: " << sz[0] << std::endl;
-        std::wcout << L"Max bucket size: " << sz[sz.size() - 1] << std::endl;
-        std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
-        std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
-        std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
+        //std::sort(sz.begin(), sz.end());
+        //std::wcout << L"Min bucket size: " << sz[0] << std::endl;
+        //std::wcout << L"Max bucket size: " << sz[sz.size() - 1] << std::endl;
+        //std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
+        //std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
+        //std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
 
 
         return index;

@@ -14,6 +14,11 @@
 class BucketIndex {
 
 public:
+    char* originFilePath;
+    char* reverseIndexFilePath;
+    char* titleIndexFilePath;
+    char* positionFilePath;
+
     static const int BITS_TO_BUCKET = 16;
     static const int HASH_LENGTH = 64;
     static const int INDEX_INITIAL_SIZE = 100;
@@ -25,6 +30,13 @@ public:
     Vector<HashSet<unsigned long long>*>* titleForwardIndex = new Vector<HashSet<unsigned long long>*>(108000);
 
     int offset;
+
+    int getTotalDocumentsNumber() {
+        return docPositions->getSize();
+    }
+    pos_type getPosition(int docId) {
+        return docPositions->get(docId);
+    }
     BucketIndex() {
         offset = HASH_LENGTH - BITS_TO_BUCKET;
         numOfBuckets = (ULLONG_MAX >> (offset)) + 1;

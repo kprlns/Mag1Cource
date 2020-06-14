@@ -39,7 +39,7 @@ public:
             if((lastInserted->getItemType() == OPERAND && itemType == OPEN_PARENTHESIS)
             || (lastInserted->getItemType() == OPERAND && itemType == NEGATE_OPERATOR)
             || (lastInserted->getItemType() == CLOSE_PARENTHESIS && itemType == NEGATE_OPERATOR)) {
-                std::wcout << L"& ";
+                //std::wcout << L"& ";
                 query->add(new QueryItem(AND_OPERATOR));
             }
         }
@@ -50,7 +50,7 @@ public:
         if(query->getSize() > 0) {
             auto lastInserted = query->getLast();
             if(lastInserted->getItemType() == OPERAND || lastInserted->getItemType() == CLOSE_PARENTHESIS) {
-                std::wcout << L"&";
+                //std::wcout << L"&";
                 query->add(new QueryItem(AND_OPERATOR));
             }
         }
@@ -80,6 +80,7 @@ public:
 
             }
         }
+        std::wcout << std::endl;
     }
 
 };

@@ -4,7 +4,7 @@ file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 
 set(SOURCES ${SOURCES})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -mtune=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 set(MY_SRC
         myStl/String.h
@@ -17,7 +17,11 @@ set(MY_SRC
         myStl/HashSet.h
         index/BucketIndex.h index/IndexSaver.h index/IndexLoader.h
         labs/is/lab4.cpp
-        query/Query.h query/QueryItem.h query/QueryParser.h query/QueryProcessor.h)
+        query/Query.h query/QueryItem.h
+        query/QueryParser.h
+        query/QueryProcessor.h
+        query/QueryOperation.h
+        query/QueryService.h query/FileQueriesProcessor.h)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
 add_executable(${BINARY}_run_is_lab3 ${SOURCES} labs/is/lab3.cpp ${MY_SRC})

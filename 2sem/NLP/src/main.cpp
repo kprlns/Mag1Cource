@@ -30,7 +30,7 @@ int main1() {
     std::wcin.imbue(std::locale("en_US.UTF-8"));
     std::wcout.imbue(std::locale("en_US.UTF-8"));
 
-    CorpusParser parser("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGames.json");
+    CorpusParser parser("/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
     //Document* doc = parser.getNextDocument();
     //std::wcout << doc->getText()->operator[](0) << L"\n" << doc->getText()->operator[](doc->getText()->getSize() - 1) << L'\n';
 

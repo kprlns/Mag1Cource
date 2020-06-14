@@ -25,12 +25,9 @@ public:
     pos_type getPosition() {
         return input.tellg();
     }
-    void testSetPosition(pos_type position) {
+    void setPosition(pos_type position) {
         input.seekg(position);
-        std::wstring tmp;
-        return;
     }
-
 
     Document* getNextDocument() {
         auto document = new Document();

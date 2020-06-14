@@ -18,7 +18,7 @@ public:
         for(int i = 0; i < string->getSize(); ++i) {
             wchar_t current = string->get(i);
             if(iswalnum(current)) {
-                std::wcout << (wchar_t)tolower(current);
+                //std::wcout << (wchar_t)tolower(current);
                 size++;
                 hash = djb2(hash, towlower(current));
             } else {
@@ -45,19 +45,19 @@ public:
     void checkOperator(Query* result, wchar_t current) {
         if(current == L'(') {
             result->validateAndAdd(OPEN_PARENTHESIS);
-            std::wcout << current << L' ';
+            //std::wcout << current << L' ';
         } else if(current == L')') {
             result->validateAndAdd(CLOSE_PARENTHESIS);
-            std::wcout << current << L' ';
+            //std::wcout << current << L' ';
         } else if(current == L'!') {
             result->validateAndAdd(NEGATE_OPERATOR);
-            std::wcout << current << L' ';
+            //std::wcout << current << L' ';
         } else if(current == L'&') {
             result->validateAndAdd(AND_OPERATOR);
-            std::wcout << current << L' ';
+            //std::wcout << current << L' ';
         } else if(current == L'|') {
             result->validateAndAdd(OR_OPERATOR);
-            std::wcout << current << L' ';
+            //std::wcout << current << L' ';
         }
     }
 
