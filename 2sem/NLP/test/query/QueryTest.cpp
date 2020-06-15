@@ -8,10 +8,19 @@
 #include "myStl/String.h"
 #include "Common.h"
 
+void setLocaleQ() {
+    std::setlocale(LC_ALL, "");
+    std::locale::global(std::locale("en_US.UTF-8"));
+    std::ios_base::sync_with_stdio(false);
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::wcin.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale("en_US.UTF-8"));
+    std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+}
 
 
 TEST(QueryTest, test1) {
-    setLocale();
+    setLocaleQ();
 
 
     String<wchar_t> str(L"московский авиационный институт");

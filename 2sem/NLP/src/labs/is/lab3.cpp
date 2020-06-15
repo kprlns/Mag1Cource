@@ -41,7 +41,7 @@ int main__lab3() {
     //bucketIndex->printAll();
     delete bucketIndex;
     auto end = std::chrono::steady_clock::now();
-    std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+    std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
     return 0;
 }
 

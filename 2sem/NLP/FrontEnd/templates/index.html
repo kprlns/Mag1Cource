@@ -4,9 +4,11 @@
     <section>
 
 {% from "_formhelpers.html" import render_field %}
+{% from "_formhelpers.html" import render_field1 %}
 <form method="post">
-
-        {{ render_field(form.search_query) }}
+        <div>
+        {{ render_field1(form.search_query)}}
+        </div>
         {{ render_field(form.num_of_result) }}
         {{ render_field(form.only_headers) }}
     <p><input type="submit" value="Искать"></p>

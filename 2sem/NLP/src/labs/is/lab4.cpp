@@ -23,8 +23,25 @@ void setLocale() {
     std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+    std::wcout << sizeof(pos_type);
+    return 0;
+    // -O3 -march=native -mtune=native
     setLocale();
+    //String<char>(argv[1]).print() ;
+    //std::wcout << std::endl << atoi(argv[2]);
+    //std::wcout << std::endl << atoi(argv[3]);
+    FileQueriesProcessor().loadIndexAndPerformQuery(argv[1], atoi(argv[3]) != 0, atoi(argv[2]));
+            //"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+// "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/queries.txt"
+    return 0;
+}
+
+
+
+
+
+/*
 
     //BucketIndex *bucketIndex = Indexer().bucketIndexFile(
     //        "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
@@ -53,8 +70,8 @@ int main() {
     //delete res;
 
     delete bucketIndex;
-    return 0;
-}
+ */
+
 
 /*
 

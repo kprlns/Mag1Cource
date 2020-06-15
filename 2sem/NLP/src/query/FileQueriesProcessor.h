@@ -7,6 +7,7 @@
 
 #include <index/BucketIndex.h>
 #include <parser/CorpusParser.h>
+#include <index/IndexLoader.h>
 #include "QueryService.h"
 
 class FileQueriesProcessor {
@@ -29,7 +30,23 @@ public:
         }
     }
 
-    void performAllFromFileAndPrintAsHtml(BucketIndex* index, char* queriesFile) {
+    void loadIndexAndPerformQuery(char* queriesFile, bool onlyHeaders, int numRes) {
+        BucketIndex* bucketIndex = BucketIndexLoader().load(
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1"
+        );
+        bucketIndex->originFilePath = "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json";
+
+        auto start = std::chrono::steady_clock::now();
+        performAllFromFileAndPrintAsHtml(bucketIndex, queriesFile, onlyHeaders, numRes);
+        auto end = std::chrono::steady_clock::now();
+        std::wcout << L"\n<p>Суммарное время: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"</p>";
+        std::wcout << L"\n<p>Всё время указано в микросекундах</p>";
+
+    }
+
+    void performAllFromFileAndPrintAsHtml(BucketIndex* index, char* queriesFile, bool onlyHeaders, int numRes) {
         QueryService queryService(index);
         CorpusParser parser(index->originFilePath);
         std::wifstream queries(queriesFile);
@@ -40,22 +57,42 @@ public:
                 continue;
             }
             String<wchar_t> line(tmpString.data(), tmpString.length());
-
+            auto start = std::chrono::steady_clock::now();
             Vector<int>* res = queryService.processStringQuery(&line);
-            resolveResultAndPrint(res, index);
+            auto end = std::chrono::steady_clock::now();
+
+            long pageFormTime = resolveResultAndPrint(res, index, onlyHeaders, numRes);
+            std::wcout << L"\n<p>Найдено результатов: " << res->getSize() << L"</p>";
+            std::wcout << L"\n<p>Время поиска по индексу: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"</p>";
+            std::wcout << L"\n<p>Время поиска формирования выдачи: " << pageFormTime << L"</p>";
             //QueryOperation::printVector(res);
             delete res;
         }
     }
 
-    void resolveResultAndPrint(Vector<int>* res, BucketIndex* index) {
+    long resolveResultAndPrint(Vector<int>* res, BucketIndex* index, bool onlyHeaders, int numRes) {
         CorpusParser parser(index->originFilePath);
-        for(int i = 0; i < 2; ++i) {
+        auto start = std::chrono::steady_clock::now();
+        std::wcout << L"<ol>";
+        for(int i = 0; i < res->getSize() && i < numRes; ++i) {
             parser.setPosition(index->getPosition(res->get(i)));
             Document* doc = parser.getNextDocument();
-            doc->print();
+            std::wcout << L"<li><div style=\"word-wrap: break-word; max-width: 400px\"><h2>";
+            //doc->print();
+            doc->getTitle()->print();
+            std::wcout << L"</h2></div>";
+            if(!onlyHeaders) {
+                std::wcout << L"</br><div style=\"word-wrap: break-word; max-width: 800px\">";
+                doc->getText()->print();
+                std::wcout << L"</div>";
+            }
+            std::wcout << L"</li></br></br>\n";
             delete doc;
         }
+        std::wcout << L"</ol>";
+        auto end = std::chrono::steady_clock::now();
+        //std::wcout << L"<p>IndexSearchTime: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"</p></br>";
+        return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
     }
 
 
