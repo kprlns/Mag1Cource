@@ -1,0 +1,18 @@
+<html lang="ru">
+<h1>Поиск по статьям из Википедии в категории Музыка</h1>
+{% block form %}
+    <section>
+
+{% from "_formhelpers.html" import render_field %}
+<form method="post">
+
+        {{ render_field(form.search_query) }}
+        {{ render_field(form.num_of_result) }}
+        {{ render_field(form.only_headers) }}
+    <p><input type="submit" value="Искать"></p>
+</form>
+    </section>
+
+{% endblock form %}
+{{ text|safe }}
+</html>

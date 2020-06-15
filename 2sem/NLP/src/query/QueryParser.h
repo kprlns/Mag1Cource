@@ -23,7 +23,7 @@ public:
                 hash = djb2(hash, towlower(current));
             } else {
                 if(size > 0) {
-                    std::wcout << L" ";
+                    //std::wcout << L" ";
                     result->validateAndAdd(hash);
                     hash = INITIAL_HASH_VALUE;
                     size = 0;
@@ -35,10 +35,10 @@ public:
             }
         }
         if(size > 0) {
-            std::wcout << " ";
+            //std::wcout << " ";
             result->validateAndAdd(hash);
         }
-        std::wcout << std::endl;
+        //std::wcout << std::endl;
         return result;
     }
 

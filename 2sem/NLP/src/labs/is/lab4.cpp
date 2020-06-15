@@ -26,8 +26,8 @@ void setLocale() {
 int main() {
     setLocale();
 
-    BucketIndex *bucketIndex = Indexer().bucketIndexFile(
-            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
+    //BucketIndex *bucketIndex = Indexer().bucketIndexFile(
+    //        "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut.json");
     //bucketIndex->printAll();
     //bucketIndex->printPositions();
     //QueryService queryService = QueryService(bucketIndex);
@@ -36,8 +36,17 @@ int main() {
     //for(int i = 0; i < res->getSize(); ++i) {
     //    std::wcout << i << L" ";
     //}
+    BucketIndex* bucketIndex = BucketIndexLoader().load(
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1"
+    );
+    bucketIndex->originFilePath = "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json";
     FileQueriesProcessor fqp;
-    fqp.performAllFromFile(bucketIndex, "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/queries.txt");
+    auto start = std::chrono::steady_clock::now();
+    fqp.performAllFromFileAndPrintAsHtml(bucketIndex, "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/queries.txt");
+    auto end = std::chrono::steady_clock::now();
+    std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
 
     std::wcout << std::endl;

@@ -22,7 +22,7 @@ public:
 
     Vector<int>* processStringQuery(String<wchar_t>* stringQuery) {
         Query* parsedQuery = queryParser.parse(stringQuery);
-        parsedQuery->print();
+        //parsedQuery->print();
         Vector<int>* res =  queryProcessor.process(bucketIndex, parsedQuery);
         delete parsedQuery;
         return res;

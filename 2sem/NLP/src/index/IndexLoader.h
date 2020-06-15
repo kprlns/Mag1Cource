@@ -39,14 +39,14 @@ public:
         if(!fileIndex.is_open() || fileIndex.fail()) {
             std::wcout << "FFFFFF2";
         }
-        std::wcout << size << std::endl;
+        //std::wcout << size << std::endl;
         for(int i = 0; i < size; ++i) {
             unsigned long long hash;
             int indexSize;
             //fileIndex >> hash >> indexSize;
             fileIndex.read((char*)&hash, sizeof(unsigned long long));
             fileIndex.read((char*)&indexSize, sizeof(int));
-            std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
+            //std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
 
             auto *indices = new Vector<int>(indexSize);
             indices->setSize(indexSize);
@@ -55,7 +55,7 @@ public:
             //    fileIndex >> tmp;
             //    indices->add(tmp);
             //}
-            std::wcout << L"Insert into bucket: " << index->getBucketIndex(hash) << std::endl;
+            //std::wcout << L"Insert into bucket: " << index->getBucketIndex(hash) << std::endl;
             auto element = new Pair<unsigned long long, Vector<int> *>(hash, indices);
             index->indexBuckets->get(index->getBucketIndex(hash))->index->set->add(element);
         }
