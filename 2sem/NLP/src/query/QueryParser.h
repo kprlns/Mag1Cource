@@ -10,7 +10,6 @@
 
 class QueryParser {
 public:
-    /// TODO test
     Query* parse(String<wchar_t>* string) {
         auto result = new Query();
         unsigned long long hash = INITIAL_HASH_VALUE;

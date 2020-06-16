@@ -27,5 +27,18 @@ static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c)
             + c;
 }
 
+class Commons {
+public:
+    static void setLocale() {
+        std::setlocale(LC_ALL, "");
+        std::locale::global(std::locale("en_US.UTF-8"));
+        std::ios_base::sync_with_stdio(false);
+        std::setlocale(LC_ALL, "en_US.UTF-8");
+        std::wcin.imbue(std::locale("en_US.UTF-8"));
+        std::wcout.imbue(std::locale("en_US.UTF-8"));
+        std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+    }
+};
+
 
 #endif //NLP_COMMON_H

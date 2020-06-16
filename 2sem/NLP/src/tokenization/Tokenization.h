@@ -52,6 +52,14 @@ public:
         countUniqueTermStatistics(string, &tmp, hashes);
         return hashes;
     }
+    static Vector<unsigned long long>* getDocumentTermHashesVector(Document* document) {
+        auto hashesVector = new Vector<unsigned long long>(512);
+        int tmp = 0;
+        countUniqueTermStatisticsVector(document->getTitle(), &tmp, hashesVector);
+        countUniqueTermStatisticsVector(document->getText(), &tmp, hashesVector);
+        return hashesVector;
+    }
+
 private:
 
     static void countUniqueTermStatistics(
@@ -83,6 +91,38 @@ private:
             hash = INITIAL_HASH_VALUE;
         }
     }
+
+    static void countUniqueTermStatisticsVector(
+            String<wchar_t>* str, int* totalLength, Vector<unsigned long long>* hashes) {
+        if(str == nullptr) {
+            return;
+        }
+        int size = 0;
+        unsigned long long hash = INITIAL_HASH_VALUE;
+        for(int i = 0; i < str->getSize(); ++i) {
+            wchar_t currentChar = str->get(i);
+            if(iswalnum(currentChar)) {
+                size++;
+                hash = djb2(hash, towlower(currentChar));
+                //std::wcout << currentChar;
+            } else if(size > 0) {
+                (*totalLength) += size;
+                size = 0;
+                hashes->add(hash);
+                //std::wcout << " " << hash << std::endl;
+                hash = INITIAL_HASH_VALUE;
+            }
+        }
+        if(size > 0) {
+            (*totalLength) += size;
+            size = 0;
+            hashes->add(hash);
+            //std::wcout << " " << hash << std::endl;
+            hash = INITIAL_HASH_VALUE;
+        }
+    }
+
+
 
 
     static inline unsigned long long fnv64(unsigned long long currentHash, wchar_t c) {

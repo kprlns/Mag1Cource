@@ -37,9 +37,9 @@ private:
                 operationsStack.popBack();
             } else if(current->isOperand()) {
                 //std::wcout << L"Query: OPERAND\n";
-                HashMapItem<unsigned long long, Vector<int>*> indexItem = index->get(current->getOperandHash());
+                HashMapItem<unsigned long long, TermIndex*> indexItem = index->get(current->getOperandHash());
                 if(indexItem.found) {
-                    operands.add(indexItem.item->value);
+                    operands.add(indexItem.getValue()->docIds);
                 } else {
                     operands.add(new Vector<int>(0));
                 }

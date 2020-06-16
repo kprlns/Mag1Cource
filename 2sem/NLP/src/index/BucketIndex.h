@@ -28,7 +28,7 @@ public:
     Vector<Index*>* indexBuckets;
     Vector<pos_type>* docPositions = new Vector<pos_type>(108000);
     Vector<HashSet<unsigned long long>*>* titleForwardIndex = new Vector<HashSet<unsigned long long>*>(108000);
-
+    //Vector<Vector<int>*>* frequencies = new Vector<Vector<int>*>(108000);
     int offset;
 
     int getTotalDocumentsNumber() {
@@ -44,9 +44,12 @@ public:
         for(int i = 0; i < indexBuckets->getMaxSize(); ++i) {
             indexBuckets->set(i, new Index(INDEX_INITIAL_SIZE));
         }
-
+        //for(int i = 0; i < frequencies->getSize(); ++i) {
+        //    frequencies->set(i, new Vector<int>(64));
+        //}
     }
     ~BucketIndex() {
+        delete docPositions;
         indexBuckets->deleteAll();
         titleForwardIndex->deleteAll();
         delete titleForwardIndex;
@@ -63,6 +66,12 @@ public:
         }
         docPositions->add(docPosition);
     }
+    void putAllVector(Vector<unsigned long long>* allHashes, int docId, pos_type docPosition) {
+        for(int i = 0; i < allHashes->getSize(); ++i) {
+            putOne(allHashes->get(i), docId);
+        }
+        docPositions->add(docPosition);
+    }
 
     int getBucketIndex(unsigned long long hash) {
         return (int)(hash >> offset);
@@ -73,7 +82,17 @@ public:
         indexBuckets->get(bucket)->putOne(hash, docId);
     }
 
-    HashMapItem<unsigned long long, Vector<int>*> get(unsigned long long hash) {
+    void putOneWithFrequencies(unsigned long long hash, int docId) {
+        int bucket = (int)(hash >> offset);
+        auto hashSetItem = indexBuckets->get(bucket)->putOne(hash, docId);
+
+        //Vector<int>* freqBucket = frequencies->get(bucket);
+        //if(freqBucket->getSize() < hashSetItem.item->value->getSize()) {
+        //    freqBucket->insertAt(hashSetItem.position)
+        //}
+    }
+
+    HashMapItem<unsigned long long, TermIndex*> get(unsigned long long hash) {
         return indexBuckets->get(getBucketIndex(hash))->get(hash);
     }
 

@@ -13,21 +13,13 @@
 #include "query/QueryService.h"
 #include "Common.h"
 
-void setLocale() {
-    std::setlocale(LC_ALL, "");
-    std::locale::global(std::locale("en_US.UTF-8"));
-    std::ios_base::sync_with_stdio(false);
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    std::wcin.imbue(std::locale("en_US.UTF-8"));
-    std::wcout.imbue(std::locale("en_US.UTF-8"));
-    std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
-}
 
-int main(int argc, char* argv[]) {
+
+int main_lab4_is(int argc, char* argv[]) {
     std::wcout << sizeof(pos_type);
     return 0;
     // -O3 -march=native -mtune=native
-    setLocale();
+    Commons::setLocale();
     //String<char>(argv[1]).print() ;
     //std::wcout << std::endl << atoi(argv[2]);
     //std::wcout << std::endl << atoi(argv[3]);

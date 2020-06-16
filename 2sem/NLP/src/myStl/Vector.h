@@ -133,10 +133,10 @@ public:
         this->size = size;
     }
     void swap(Vector<T>&& other);
+
 private:
     T* data;
     int maxSize{0};
-
     ///  Last inserted element index
     int size{0};
 
@@ -282,7 +282,6 @@ void Vector<T>::remove(int i) {
     size--;
 }
 
-// TODO tests
 template<typename T>
 void Vector<T>::insertAt(int i, const T& element) {
 #ifdef VECTOR_DEBUG

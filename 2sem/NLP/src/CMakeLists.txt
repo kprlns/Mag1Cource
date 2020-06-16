@@ -21,10 +21,10 @@ set(MY_SRC
         query/QueryParser.h
         query/QueryProcessor.h
         query/QueryOperation.h
-        query/QueryService.h query/FileQueriesProcessor.h)
+        query/QueryService.h query/FileQueriesProcessor.h dto/TermIndex.h)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
-add_executable(${BINARY}_run_is_lab3 ${SOURCES} labs/is/lab3.cpp ${MY_SRC})
+add_executable(${BINARY}_run_nlp ${SOURCES} labs/nlp/lab2.cpp ${MY_SRC})
 
 
 

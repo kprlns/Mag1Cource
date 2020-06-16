@@ -48,15 +48,20 @@ public:
             fileIndex.read((char*)&indexSize, sizeof(int));
             //std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
 
-            auto *indices = new Vector<int>(indexSize);
-            indices->setSize(indexSize);
-            fileIndex.read((char*)indices->getData(), sizeof(int) * indexSize);
+            TermIndex* indices = new TermIndex(indexSize);
+            indices->docIds->setSize(indexSize);
+            indices->frequencies->setSize(indexSize);
+
+            fileIndex.read((char*)indices->docIds->getData(), sizeof(int) * indexSize);
+            fileIndex.read((char*)indices->frequencies->getData(), sizeof(int) * indexSize);
             //for (int j = 0; j < indexSize; ++j) {
             //    fileIndex >> tmp;
             //    indices->add(tmp);
             //}
             //std::wcout << L"Insert into bucket: " << index->getBucketIndex(hash) << std::endl;
-            auto element = new Pair<unsigned long long, Vector<int> *>(hash, indices);
+            auto element = new Pair<unsigned long long, TermIndex*>(hash, indices);
+            // TODO fixed?
+
             index->indexBuckets->get(index->getBucketIndex(hash))->index->set->add(element);
         }
     }

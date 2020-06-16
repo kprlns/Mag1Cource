@@ -66,6 +66,10 @@ public:
     K key;
     V value;
 
+    void deleteAll() {
+        delete key;
+        delete value;
+    }
 
 };
 

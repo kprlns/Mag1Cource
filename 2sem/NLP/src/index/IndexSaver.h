@@ -69,8 +69,11 @@ private:
             fileIndex.write((char*)&(item->key), sizeof(item->key));
             int itemValSize = item->value->getSize();
             fileIndex.write((char*)&itemValSize, sizeof(itemValSize));
-            fileIndex.write((char*)item->value->getData(),
-                    sizeof(item->value->get(0)) * itemValSize);
+            //TODO fixed?
+            fileIndex.write((char*)item->getValue()->docIds->getData(),
+                    sizeof(item->getValue()->docIds->get(0)) * itemValSize);
+            fileIndex.write((char*)item->getValue()->frequencies->getData(),
+                            sizeof(item->getValue()->frequencies->get(0)) * itemValSize);
         }
     }
 

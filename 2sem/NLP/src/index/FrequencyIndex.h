@@ -11,26 +11,22 @@
 #include "myStl/Vector.h"
 #include "Common.h"
 #include <bitset>
-#include <dto/TermIndex.h>
-
-
-class Index {
+/*
+class FrequencyIndex {
 public:
-    HashMap<unsigned long long, TermIndex*>* index;
+    HashMap<unsigned long long, Pair<Vector<int>*,Vector<int>*>*  >* index;
     Vector<pos_type>* docPositions;
 
-    Index() {
-        index = new HashMap<unsigned long long, TermIndex*>(2048);
+
+    FrequencyIndex() {
+        index = new HashMap<unsigned long long, Pair<Vector<int>*,Vector<int>*>* >(100000);
+        docPositions = new Vector<pos_type>(108000);
+    }
+    FrequencyIndex(unsigned long long size) {
+        index = new HashMap<unsigned long long, Pair<Vector<int>*,Vector<int>*>* >(size);
         docPositions = new Vector<pos_type>(1);
     }
-    Index(unsigned long long size) {
-        index = new HashMap<unsigned long long, TermIndex*>(size);
-        docPositions = new Vector<pos_type>(1);
-    }
-    ~Index() {
-        for (int i = 0; i < index->set->getSize(); ++i) {
-            delete index->set->get(i)->value;
-        }
+    ~FrequencyIndex() {
         delete docPositions;
         delete index;
     }
@@ -39,25 +35,24 @@ public:
         for(int i = 0; i < allHashes->getSize(); ++i) {
             putOne(allHashes->getAtPos(i), docId);
         }
-        //docPositions->add(docPosition);
+        docPositions->add(docPosition);
     }
 
-    HashMapItem<unsigned long long, TermIndex*> putOne(unsigned long long hash, int docId) {
+    void putOne(unsigned long long hash, int docId) {
         //auto newPair = new Pair<unsigned long long, Vector<int>*>(hash, nullptr);
         auto setItem = index->put(hash, nullptr);
         if(setItem.item->value == nullptr) {
-            setItem.item->value = new TermIndex(64);
+            setItem.item->value = new Pair<Vector<int>*,Vector<int>*>()
+                    // new Vector<int>(512);
         }
-        if((setItem.item->value->getSize() == 0) || (docId != setItem.item->value->docIds->getLast())) {
-            setItem.item->value->add(docId,1);
-        } else {
-            setItem.item->value->increaseFreqLast(1);
-        }
-        return setItem;
+        setItem.item->value->add(docId);
     }
 
-    HashMapItem<unsigned long long, TermIndex*> get(unsigned long long hash) {
-        return index->get(hash);
+    HashMapItem<unsigned long long, Vector<int>*> get(unsigned long long hash) {
+        HashMapItem<unsigned long long, Pair<Vector<int>*,Vector<int>*>> tmpRes = index->get(hash);
+        HashMapItem<unsigned long long, Vector<int>*> res;
+        res.found = tmpRes.found;
+        res.item =
     }
 
     void printIndex() {
@@ -66,7 +61,7 @@ public:
             std::wcout << std::bitset<64>(pair->key) << " ";
             std::wcout << pair->key << " : ";
             for(int j = 0; j < pair->value->getSize(); ++j) {
-                std::wcout << pair->value->docIds->get(j) << " ";
+                std::wcout << pair->value->get(j) << " ";
             }
             std::wcout << std::endl;
         }
@@ -82,4 +77,5 @@ public:
 
 };
 
-#endif //NLP_INDEX_H
+*/
+ #endif //NLP_INDEX_H

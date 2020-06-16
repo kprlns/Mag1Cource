@@ -11,9 +11,17 @@
 template <typename K, typename V>
 class HashMapItem {
 public:
+    int position;
     HashMapItem() = default;
     bool found{};
     Pair<K,V>* item;
+
+    K getKey() {
+        return item->key;
+    }
+    V getValue() {
+        return item->value;
+    }
 };
 
 
@@ -76,6 +84,7 @@ public:
         } else {
             result.found = true;
             result.item = set->get(res);
+            result.position = res;
         }
         return result;
     }
@@ -86,11 +95,12 @@ public:
         result.found = true;
         int res = binarySearch(key, &posToInsert);
         if (res == -1) {
-
             set->insertAt(posToInsert, new Pair<K, V>(key, value));
             result.item = set->get(posToInsert);
+            result.position = posToInsert;
             return result;
         } else {
+            result.position = res;
             result.item = set->get(res);
         }
         return result;

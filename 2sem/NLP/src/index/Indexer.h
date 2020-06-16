@@ -65,33 +65,34 @@ public:
             //79,129,329
             //40,331,459
             //Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
-            auto hashes = Tokenization::getDocumentTermHashes(document);
-            index->putAll(hashes, cnt - 1, document->getPosition());
+            auto hashes = Tokenization::getDocumentTermHashesVector(document);
+            //index->putAll(hashes, cnt - 1, document->getPosition());
+            index->putAllVector(hashes, cnt - 1, document->getPosition());
             delete hashes;
             index->putTitleForwardIndex(Tokenization::getStringTermHashes(document->getTitle()));
             if(cnt % 1000 == 0) {
                 std::wcout << cnt << std::endl;
                 //break;
             }
+            delete document;
 
         }
         auto end = std::chrono::steady_clock::now();
 
         //std::wcout << L"Total length: " << totalLength << L"\n";
-        //std::wcout << L"Total tokens: " << index->getSize() << L"\n";
+        std::wcout << L"Total tokens: " << index->getSize() << L"\n";
         //std::wcout << L"Total docs: " << totalDocs << L"\n";
-        //std::wcout.imbue(std::locale())
-        //std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+        std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
         std::vector<int> sz;
         for(int i = 0; i < index->indexBuckets->getSize(); ++i) {
             sz.push_back(index->indexBuckets->get(i)->index->getSize());
         }
-        //std::sort(sz.begin(), sz.end());
-        //std::wcout << L"Min bucket size: " << sz[0] << std::endl;
-        //std::wcout << L"Max bucket size: " << sz[sz.size() - 1] << std::endl;
-        //std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
-        //std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
-        //std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
+        std::sort(sz.begin(), sz.end());
+        std::wcout << L"Min bucket size: " << sz[0] << std::endl;
+        std::wcout << L"Max bucket size: " << sz[sz.size() - 1] << std::endl;
+        std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
+        std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
+        std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
 
 
         return index;

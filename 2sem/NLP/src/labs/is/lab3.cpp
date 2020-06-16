@@ -10,7 +10,7 @@
 #include "parser/CorpusParser.h"
 #include "index/IndexSaver.h"
 
-int main__lab3() {
+int main() {
     auto start = std::chrono::steady_clock::now();
 
     std::setlocale(LC_ALL, "");
@@ -32,12 +32,12 @@ int main__lab3() {
             "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
     //bucketIndex->printIndex();
     //bucketIndex->printPositions();
-    BucketIndexSaver().save(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1",
-            bucketIndex
-    );
+    //BucketIndexSaver().save(
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1",
+    //        bucketIndex
+    //);
     //bucketIndex->printAll();
     delete bucketIndex;
     auto end = std::chrono::steady_clock::now();
