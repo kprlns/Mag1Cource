@@ -41,7 +41,7 @@ public:
                 sizeof(index->docPositions->get(0)) * sizePositions);
 
 
-        saveForwardIndex(fileTitleForwardIndex, index->forwardIndex);
+        saveForwardIndex(fileTitleForwardIndex, index->forwardIndex, index->docSizes);
 
         fileIndex.close();
         filePositions.close();
@@ -52,7 +52,8 @@ public:
     }
 
 private:
-    void saveForwardIndex(std::ofstream& fileTitleForwardIndex, Vector<HashMap<unsigned long long, int>*>* forwardIndex) {
+    void saveForwardIndex(std::ofstream& fileTitleForwardIndex, Vector<HashMap<unsigned long long, int>*>* forwardIndex,
+            Vector<int>* docSizes) {
         //title forward index
         int titleIndexSize = forwardIndex->getSize();
         fileTitleForwardIndex.write((char*)&titleIndexSize, sizeof(titleIndexSize));
@@ -68,6 +69,7 @@ private:
             //fileTitleForwardIndex.write((char*)current->set->getData(),
             //                            sizeof(current->getAtPos(0)) * currSize);
         }
+        fileTitleForwardIndex.write((char*)docSizes->getData(), sizeof(docSizes->get(0)) * titleIndexSize);
 
     }
 

@@ -11,7 +11,7 @@
 #include "index/IndexSaver.h"
 #include "index/IndexLoader.h"
 
-int main() {
+int main_is_lab3_() {
     auto start = std::chrono::steady_clock::now();
 
     std::setlocale(LC_ALL, "");
@@ -30,30 +30,35 @@ int main() {
     //return 0;
 
     BucketIndex *bucketIndex = Indexer().bucketIndexFile(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1.json");
-
-/*    BucketIndexSaver().save(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Ind",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Pos",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Forward",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    BucketIndexSaver().save(
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward",
             bucketIndex
-    );*/
+    );
     //bucketIndex->printAll();
-    BucketIndex* loaded = BucketIndexLoader().load(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Ind",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Pos",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Forward"
-            );
-    std::wcout << L"\n\n-=-=-=-=-=-=-=-=-=-=-=--=-=-=-\n\n" << std::endl;
+    //BucketIndex* loaded = BucketIndexLoader().load(
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Ind",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Pos",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Forward"
+    //        );
+    //std::wcout << L"\n\n-=-=-=-=-=-=-=-=-=-=-=--=-=-=-\n\n" << std::endl;
 
     //loaded->printAll();
 
-    delete bucketIndex;
-    delete loaded;
+    //delete bucketIndex;
+    //delete loaded;
     auto end = std::chrono::steady_clock::now();
-    std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+    std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()
+               << std::endl;
     return 0;
 }
+
+
+//"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
+//"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos",
+//"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward",
 
 //unsigned long long a = ULLONG_MAX;
 //std::wcout << a << std::endl;

@@ -18,4 +18,5 @@ int main_jkfnjef() {
     Commons::setLocale();
 
     std::wcout << L"Привет!";
+    return 0;
 }

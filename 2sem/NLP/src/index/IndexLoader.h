@@ -16,6 +16,7 @@ public:
     BucketIndexLoader() {}
 
     BucketIndex* load(char* filenameIndex, char* filenamePositions, char* filenameTitleForwardIndex) {
+        auto start = std::chrono::steady_clock::now();
         auto flags = std::ifstream::binary | std::ifstream::in;
         BucketIndex* index = new BucketIndex();
         index->reverseIndexFilePath = filenameIndex;
@@ -25,6 +26,8 @@ public:
         loadIndex(filenameIndex, index, flags);
         loadPositions(filenamePositions, index, flags);
         loadTitleForwardIndex(filenameTitleForwardIndex, index, flags);
+        auto end = std::chrono::steady_clock::now();
+        //std::wcout << L"Load time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
         return index;
     }
@@ -105,6 +108,12 @@ public:
             //    set->addInTheEndOfSetArray(tmp);
             //}
             index->forwardIndex->add(set);
+        }
+        index->docSizes = new Vector<int>(size);
+        index->docSizes->setSize(size);
+        titleForwardIndexFile.read((char*)index->docSizes->getData(), sizeof(int) * size);
+        if(!titleForwardIndexFile.is_open() || titleForwardIndexFile.fail()) {
+            std::wcout << "FFFFFF1";
         }
     }
 

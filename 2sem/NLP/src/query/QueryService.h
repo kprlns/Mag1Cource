@@ -20,8 +20,8 @@ public:
         this->bucketIndex = bucketIndex;
     }
 
-    Vector<int>* processStringQuery(String<wchar_t>* stringQuery) {
-        Query* parsedQuery = queryParser.parse(stringQuery);
+    Vector<int>* processStringQuery(String<wchar_t>* stringQuery, HashSet<unsigned long long>* operandHashes) {
+        Query* parsedQuery = queryParser.parse(stringQuery, operandHashes);
         //parsedQuery->print();
         Vector<int>* res =  queryProcessor.process(bucketIndex, parsedQuery);
         delete parsedQuery;
@@ -30,7 +30,8 @@ public:
 
     Vector<int>* processStringQuery(wchar_t* string) {
         String<wchar_t> stringQuery(string);
-        return processStringQuery(&stringQuery);
+        //TODO fix
+        return processStringQuery(&stringQuery, new HashSet<unsigned long long>(32));
     }
 
 };

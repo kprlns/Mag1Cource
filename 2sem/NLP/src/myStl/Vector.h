@@ -10,7 +10,7 @@
 
 
 //#define VECTOR_DEBUG
-#define log(message) do{ std::cout << message << std::endl; }while(0);
+#define mylog(message) do{ std::cout << message << std::endl; }while(0);
 
 #define logCondition(condition, message) do{ \
  if(condition) {std::cout << message << std::endl;}\

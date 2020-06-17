@@ -36,6 +36,20 @@ def perform_query(n_lines, only_headers):
     return '<div style="display: block; margin: 10px 0; line-height:150%;">' + tmp_split[-5] + tmp_split[-4] + tmp_split[-3] + tmp_split[-2] + tmp_split[-1] + tmp + '</div>'
 
 
+def perform_query_tf_idf(n_lines, only_headers):
+    out = subprocess.Popen(
+        './search_tf_idf {0} {1} {2}'.format(query_file_name, n_lines, only_headers),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT, shell=True)
+
+    tmp = out.communicate()[0].decode('utf-8')
+    tmp_split = tmp.split('\n')
+
+    return '<div style="display: block; margin: 10px 0; line-height:150%;">' + tmp_split[-6] + tmp_split[-5] + tmp_split[-4] + tmp_split[-3] + tmp_split[-2] + tmp_split[-1] + tmp + '</div>'
+
+
+
+
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
@@ -57,7 +71,7 @@ def hello_world():
         #form1.search_query(style="width: 800px;")
 
         save_query(query_file_name, form1.search_query.data)
-        return render_template('index.html', form=form1, text=perform_query(n_res, only_head))
+        return render_template('index.html', form=form1, text=perform_query_tf_idf(n_res, only_head))
 
 
 if __name__ == '__main__':

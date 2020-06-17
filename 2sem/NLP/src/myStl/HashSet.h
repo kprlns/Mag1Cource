@@ -105,7 +105,7 @@ public:
     }
 
     /// use very carefully
-    int addInTheEndOfSetArray(T element) {
+    void addInTheEndOfSetArray(T element) {
         set->add(element);
     }
 

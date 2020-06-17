@@ -10,7 +10,7 @@
 
 class QueryParser {
 public:
-    Query* parse(String<wchar_t>* string) {
+    Query* parse(String<wchar_t>* string, HashSet<unsigned long long>* operandHashes) {
         auto result = new Query();
         unsigned long long hash = INITIAL_HASH_VALUE;
         int size = 0;
@@ -24,6 +24,7 @@ public:
                 if(size > 0) {
                     //std::wcout << L" ";
                     result->validateAndAdd(hash);
+                    operandHashes->put(hash);
                     hash = INITIAL_HASH_VALUE;
                     size = 0;
 

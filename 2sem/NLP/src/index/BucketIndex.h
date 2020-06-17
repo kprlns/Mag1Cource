@@ -28,6 +28,7 @@ public:
     Vector<Index*>* indexBuckets;
     Vector<pos_type>* docPositions = new Vector<pos_type>(108000);
     Vector<HashMap<unsigned long long, int>*>* forwardIndex = new Vector<HashMap<unsigned long long, int>*>(108000);
+    Vector<int>* docSizes = new Vector<int>(108000);
     //Vector<Vector<int>*>* frequencies = new Vector<Vector<int>*>(108000);
     int offset;
 
@@ -77,6 +78,7 @@ public:
         for(int i = 0; i < allHashes->getSize(); ++i) {
             putOne(allHashes->get(i), docId);
         }
+        docSizes->add(allHashes->getSize());
         docPositions->add(docPosition);
     }
 
@@ -125,6 +127,12 @@ public:
             }
             std::wcout << std::endl;
         }
+        std::wcout << L"Sizes: \n";
+        for(int i = 0; i < docSizes->getSize(); ++i) {
+            std::wcout << docSizes->get(i) << L" ";
+        }
+        std::wcout << std::endl;
+
     }
     void printAll() {
         printIndex();
