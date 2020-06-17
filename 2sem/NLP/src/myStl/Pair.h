@@ -14,6 +14,7 @@ public:
         this->value = value;
     }
      */
+    Pair() = default;
     Pair(K key, V value) {
         this->key = key;
         this->value = value;

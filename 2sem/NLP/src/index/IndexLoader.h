@@ -39,14 +39,14 @@ public:
         if(!fileIndex.is_open() || fileIndex.fail()) {
             std::wcout << "FFFFFF2";
         }
-        std::wcout << size << std::endl;
+        //std::wcout << size << std::endl;
         for(int i = 0; i < size; ++i) {
             unsigned long long hash;
             int indexSize;
             //fileIndex >> hash >> indexSize;
             fileIndex.read((char*)&hash, sizeof(unsigned long long));
             fileIndex.read((char*)&indexSize, sizeof(int));
-            std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
+            //std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
 
             TermIndex* indices = new TermIndex(indexSize);
             indices->docIds->setSize(indexSize);
@@ -91,14 +91,20 @@ public:
             int indexSize;
             //titleForwardIndexFile >> indexSize;
             titleForwardIndexFile.read((char*)&indexSize, sizeof(indexSize));
-            auto set = new HashSet<unsigned long long>(indexSize);
-            set->set->setSize(indexSize);
-            titleForwardIndexFile.read((char*)set->set->getData(), sizeof(unsigned long long) * indexSize);
+            auto set = new HashMap<unsigned long long, int>(indexSize);
+            //set->set->setSize(indexSize);
+            for(int j = 0; j < indexSize; ++j) {
+                auto* newItem = new Pair<unsigned long long, int>();
+                titleForwardIndexFile.read((char*)&newItem->key, sizeof(newItem->key));
+                titleForwardIndexFile.read((char*)&newItem->value, sizeof(newItem->value));
+                set->set->add(newItem);
+            }
+            //titleForwardIndexFile.read((char*)set->set->getData(), sizeof(unsigned long long) * indexSize);
             //for(int j = 0; j < indexSize; j++) {
             //    titleForwardIndexFile >> tmp;
             //    set->addInTheEndOfSetArray(tmp);
             //}
-            index->titleForwardIndex->add(set);
+            index->forwardIndex->add(set);
         }
     }
 

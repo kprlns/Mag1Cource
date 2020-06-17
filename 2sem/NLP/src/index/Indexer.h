@@ -64,12 +64,10 @@ public:
             }
             //79,129,329
             //40,331,459
-            //Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
             auto hashes = Tokenization::getDocumentTermHashesVector(document);
-            //index->putAll(hashes, cnt - 1, document->getPosition());
             index->putAllVector(hashes, cnt - 1, document->getPosition());
+            index->putTitleForwardIndex(hashes);
             delete hashes;
-            index->putTitleForwardIndex(Tokenization::getStringTermHashes(document->getTitle()));
             if(cnt % 1000 == 0) {
                 std::wcout << cnt << std::endl;
                 //break;

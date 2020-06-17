@@ -41,17 +41,7 @@ public:
                 sizeof(index->docPositions->get(0)) * sizePositions);
 
 
-        //title forward index
-        int titleIndexSize = index->titleForwardIndex->getSize();
-        fileTitleForwardIndex.write((char*)&titleIndexSize, sizeof(titleIndexSize));
-        for(int i = 0; i < titleIndexSize; ++i) {
-            auto current = index->titleForwardIndex->get(i);
-            int currSize = current->getSize();
-            fileTitleForwardIndex.write((char*)&currSize, sizeof(currSize));
-            fileTitleForwardIndex.write((char*)current->set->getData(),
-                    sizeof(current->getAtPos(0)) * currSize);
-        }
-
+        saveForwardIndex(fileTitleForwardIndex, index->forwardIndex);
 
         fileIndex.close();
         filePositions.close();
@@ -62,6 +52,25 @@ public:
     }
 
 private:
+    void saveForwardIndex(std::ofstream& fileTitleForwardIndex, Vector<HashMap<unsigned long long, int>*>* forwardIndex) {
+        //title forward index
+        int titleIndexSize = forwardIndex->getSize();
+        fileTitleForwardIndex.write((char*)&titleIndexSize, sizeof(titleIndexSize));
+        for(int i = 0; i < titleIndexSize; ++i) {
+            auto current = forwardIndex->get(i);
+            int currSize = current->getSize();
+            fileTitleForwardIndex.write((char*)&currSize, sizeof(currSize));
+            for(int j = 0; j < currSize; ++j) {
+                Pair<unsigned long long, int>* currentItem = current->getAtPos(j);
+                fileTitleForwardIndex.write((char*)&currentItem->key, sizeof(currentItem->key));
+                fileTitleForwardIndex.write((char*)&currentItem->value, sizeof(currentItem->value));
+            }
+            //fileTitleForwardIndex.write((char*)current->set->getData(),
+            //                            sizeof(current->getAtPos(0)) * currSize);
+        }
+
+    }
+
 
     void saveOne(std::ofstream& fileIndex, Index* index) {
         for(int i = 0; i < index->index->getSize(); ++i) {

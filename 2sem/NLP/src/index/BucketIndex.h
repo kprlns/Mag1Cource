@@ -27,7 +27,7 @@ public:
 
     Vector<Index*>* indexBuckets;
     Vector<pos_type>* docPositions = new Vector<pos_type>(108000);
-    Vector<HashSet<unsigned long long>*>* titleForwardIndex = new Vector<HashSet<unsigned long long>*>(108000);
+    Vector<HashMap<unsigned long long, int>*>* forwardIndex = new Vector<HashMap<unsigned long long, int>*>(108000);
     //Vector<Vector<int>*>* frequencies = new Vector<Vector<int>*>(108000);
     int offset;
 
@@ -51,13 +51,20 @@ public:
     ~BucketIndex() {
         delete docPositions;
         indexBuckets->deleteAll();
-        titleForwardIndex->deleteAll();
-        delete titleForwardIndex;
+        forwardIndex->deleteAll();
+        delete forwardIndex;
         delete indexBuckets;
     }
 
-    void putTitleForwardIndex(HashSet<unsigned long long>* titleIndex) {
-        titleForwardIndex->add(titleIndex);
+    void putTitleForwardIndex(Vector<unsigned long long>* forward) {
+        auto* currentForwardIndex = new HashMap<unsigned long long, int>(128);
+        //forwardIndex->add(titleIndex);
+        for(int i = 0; i < forward->getSize(); ++i) {
+            HashMapItem<unsigned long long, int> inserted =
+                    currentForwardIndex->put(forward->get(i), 0);
+            inserted.item->value += 1;
+        }
+        forwardIndex->add(currentForwardIndex);
     }
 
     void putAll(HashSet<unsigned long long>* allHashes, int docId, pos_type docPosition) {
@@ -110,19 +117,19 @@ public:
     }
     void printForwardIndex() {
         std::wcout << L"\n========================\n";
-        for(int i = 0; i < titleForwardIndex->getSize(); ++i) {
+        for(int i = 0; i < forwardIndex->getSize(); ++i) {
             std::wcout << i << L" : ";
-            auto current = titleForwardIndex->get(i);
+            auto current = forwardIndex->get(i);
             for(int j = 0; j < current->getSize(); j++) {
-                std::wcout << current->getAtPos(j) << L" ";
+                std::wcout << L"{" << current->getAtPos(j)->key << L", " << current->getAtPos(j)->value << L"} ";
             }
             std::wcout << std::endl;
         }
     }
     void printAll() {
         printIndex();
-        printPositions();
         printForwardIndex();
+        printPositions();
     }
 
     int getSize() {
