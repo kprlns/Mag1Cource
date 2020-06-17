@@ -30,14 +30,13 @@ void calcTokenizationStatistics(const char* filename) {
         }
         //79,129,329
         //40,331,459
-        Tokenization::countUniqueTermStatistics(document, &totalLength, &totalTokens, &totalDocs);
+        Tokenization::getStatisticsDocumentTermHashesVector(document, &totalLength, &totalTokens, &totalDocs);
         if(cnt % 100000 == 0) {
             //std::wcout << cnt << std::endl;
             //break;
         }
     }
     auto end = std::chrono::steady_clock::now();
-
     std::wcout << L"Total length: " << totalLength << L"\n";
     std::wcout << L"Total tokens: " << totalTokens << L"\n";
     std::wcout << L"Total docs: " << totalDocs << L"\n";
@@ -81,7 +80,7 @@ void calcHonestTokenizationStatistics(const char* filename) {
 
 }
 
-int main_nlp_lab1() {
+int main_is_1() {
 
     std::setlocale(LC_ALL,"");
     std::locale::global(std::locale("en_US.UTF-8") );

@@ -9,8 +9,10 @@
 
 class TermIndex {
 public:
+    int count;
     //TODO add sum of frequencies
     TermIndex(int size) {
+        count = 0;
         docIds = new Vector<int>(size);
         frequencies = new Vector<int>(size);
     }
@@ -26,10 +28,15 @@ public:
     void add(int docId, int freq) {
         docIds->add(docId);
         frequencies->add(freq);
+        count += freq;
     }
 
     void increaseFreqLast(int add) {
         (*frequencies->getPointer(getSize() - 1)) += add;
+        count += add;
+    }
+    int getCount() {
+        return count;
     }
 
     Vector<int>* docIds;

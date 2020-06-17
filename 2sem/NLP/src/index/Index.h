@@ -71,6 +71,19 @@ public:
             std::wcout << std::endl;
         }
     }
+    void printIndexWithFreq() {
+        for(int i = 0; i < index->getSize(); ++i) {
+            auto pair = index->getAtPos(i);
+            std::wcout << std::bitset<64>(pair->key) << " ";
+            std::wcout << pair->key << " : ";
+            for(int j = 0; j < pair->value->getSize(); ++j) {
+                std::wcout << L"( " << pair->value->docIds->get(j) << L", " << pair->value->frequencies->get(j) << L") ";
+            }
+            std::wcout << L" [ " << pair->value->count << " ] ";
+            std::wcout << std::endl;
+        }
+    }
+
     void printPositions() {
         std::wcout << "\n----------------------\n";
         for(int i = 0; i < docPositions->getSize(); ++i) {

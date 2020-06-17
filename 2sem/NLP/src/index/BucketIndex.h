@@ -98,7 +98,7 @@ public:
 
     void printIndex() {
         for(int i = 0; i < indexBuckets->getSize(); ++i) {
-            indexBuckets->get(i)->printIndex();
+            indexBuckets->get(i)->printIndexWithFreq();
         }
     }
     void printPositions() {

@@ -70,6 +70,7 @@ private:
             int itemValSize = item->value->getSize();
             fileIndex.write((char*)&itemValSize, sizeof(itemValSize));
             //TODO fixed?
+            fileIndex.write((char*)&item->getValue()->count, sizeof(item->getValue()->count));
             fileIndex.write((char*)item->getValue()->docIds->getData(),
                     sizeof(item->getValue()->docIds->get(0)) * itemValSize);
             fileIndex.write((char*)item->getValue()->frequencies->getData(),

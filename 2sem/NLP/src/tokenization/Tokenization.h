@@ -13,6 +13,8 @@
 
 class Tokenization {
 public:
+    static const int MAX_TOKEN_SIZE = 9999932;
+
     static Vector< String<wchar_t >* >* makeTokens(Document* document) {
         auto* result = new Vector< String<wchar_t>* >(256);
         addAllSplits(document->getTitle(), result);
@@ -60,6 +62,16 @@ public:
         return hashesVector;
     }
 
+    static void getStatisticsDocumentTermHashesVector(Document* document, int* totalLength, int* totalTokens, int* totalDocs) {
+        (*totalDocs)++;
+        auto hashesVector = new Vector<unsigned long long>(512);
+        int tmp = 0;
+        countUniqueTermStatisticsVector(document->getTitle(), totalLength, hashesVector);
+        countUniqueTermStatisticsVector(document->getText(), totalLength, hashesVector);
+        (*totalTokens) += hashesVector->getSize();
+        delete hashesVector;
+    }
+
 private:
 
     static void countUniqueTermStatistics(
@@ -75,12 +87,14 @@ private:
                 size++;
                 hash = djb2(hash, towlower(currentChar));
                 //std::wcout << currentChar;
-            } else if(size > 0) {
-                (*totalLength) += size;
-                size = 0;
-                hashes->put(hash);
+            } else if(size > 0 ) {
+                if(size < MAX_TOKEN_SIZE) {
+                    (*totalLength) += size;
+                    hashes->put(hash);
+                }
                 //std::wcout << " " << hash << std::endl;
                 hash = INITIAL_HASH_VALUE;
+                size = 0;
             }
         }
         if(size > 0) {
@@ -106,11 +120,13 @@ private:
                 hash = djb2(hash, towlower(currentChar));
                 //std::wcout << currentChar;
             } else if(size > 0) {
-                (*totalLength) += size;
-                size = 0;
-                hashes->add(hash);
+                if(size < MAX_TOKEN_SIZE) {
+                    (*totalLength) += size;
+                    hashes->add(hash);
+                }
                 //std::wcout << " " << hash << std::endl;
                 hash = INITIAL_HASH_VALUE;
+                size = 0;
             }
         }
         if(size > 0) {

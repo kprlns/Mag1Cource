@@ -39,19 +39,19 @@ public:
         if(!fileIndex.is_open() || fileIndex.fail()) {
             std::wcout << "FFFFFF2";
         }
-        //std::wcout << size << std::endl;
+        std::wcout << size << std::endl;
         for(int i = 0; i < size; ++i) {
             unsigned long long hash;
             int indexSize;
             //fileIndex >> hash >> indexSize;
             fileIndex.read((char*)&hash, sizeof(unsigned long long));
             fileIndex.read((char*)&indexSize, sizeof(int));
-            //std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
+            std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
 
             TermIndex* indices = new TermIndex(indexSize);
             indices->docIds->setSize(indexSize);
             indices->frequencies->setSize(indexSize);
-
+            fileIndex.read((char*)&indices->count, sizeof(indices->count));
             fileIndex.read((char*)indices->docIds->getData(), sizeof(int) * indexSize);
             fileIndex.read((char*)indices->frequencies->getData(), sizeof(int) * indexSize);
             //for (int j = 0; j < indexSize; ++j) {

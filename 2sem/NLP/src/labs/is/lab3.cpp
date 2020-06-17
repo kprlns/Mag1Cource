@@ -9,6 +9,7 @@
 
 #include "parser/CorpusParser.h"
 #include "index/IndexSaver.h"
+#include "index/IndexLoader.h"
 
 int main() {
     auto start = std::chrono::steady_clock::now();
@@ -29,16 +30,25 @@ int main() {
     //return 0;
 
     BucketIndex *bucketIndex = Indexer().bucketIndexFile(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
-    //bucketIndex->printIndex();
-    //bucketIndex->printPositions();
-    //BucketIndexSaver().save(
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/index1",
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/positions1",
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/title1",
-    //        bucketIndex
-    //);
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1.json");
+    bucketIndex->printIndex();
+    bucketIndex->printPositions();
+/*    BucketIndexSaver().save(
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Ind",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Pos",
+            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Title",
+            bucketIndex
+    );*/
     //bucketIndex->printAll();
+    //BucketIndex* loaded = BucketIndexLoader().load(
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Ind",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Pos",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/dataUkrainianGamesCut1_Title"
+    //        );
+    //std::wcout << L"\n\n-=-=-=-=-=-=-=-=-=-=-=--=-=-=-\n\n" << std::endl;
+
+    //loaded->printAll();
+
     delete bucketIndex;
     auto end = std::chrono::steady_clock::now();
     std::wcout << L"Total elapsed time: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
