@@ -12,7 +12,7 @@
 #include "index/IndexSaver.h"
 #include "index/IndexLoader.h"
 
-int main(int argc, char* argv[]) {
+int main_omefwfw(int argc, char* argv[]) {
     Commons::setLocale();
 
     // -O3 -march=native -mtune=native

@@ -20,10 +20,11 @@ enum QueryItemEnum {
 };
 
 class QueryItem {
+public:
     QueryItemEnum itemType;
     unsigned long long operandHash;
 
-public:
+
     QueryItem(QueryItemEnum itemType) {
         this->itemType = itemType;
     }

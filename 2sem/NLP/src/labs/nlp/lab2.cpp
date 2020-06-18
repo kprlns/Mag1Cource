@@ -13,10 +13,15 @@
 #include "query/QueryService.h"
 #include "Common.h"
 
+#include <vector>
+#include <algorithm>
 
-int main_jkfnjef() {
+#include "tokenization/ZiphStatistics.h"
+
+
+int main() {
     Commons::setLocale();
 
-    std::wcout << L"Привет!";
+    ZiphStatistics().calc();
     return 0;
 }

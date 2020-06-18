@@ -9,10 +9,11 @@
 #include "parser/CorpusParser.h"
 #include "Common.h"
 #include "tokenization/Tokenization.h"
+#include "tokenization/Terms.h"
 
 #include <wctype.h>
 #include <clocale>
-
+#include <myStl/BucketHashMap.h>
 
 
 void calcTokenizationStatistics(const char* filename) {
@@ -80,18 +81,33 @@ void calcHonestTokenizationStatistics(const char* filename) {
 
 }
 
-int main_is_1() {
+void countTerms(const char* filename) {
+    auto* hashes = new BucketHashMap<unsigned long long, int>();
+    CorpusParser parser(filename);
+    auto start = std::chrono::steady_clock::now();
+    int cnt = 0;
+    while (true) {
+        cnt++;
+        Document *document = parser.getNextDocument();
+        if(document == nullptr) {
+            break;
+        }
+        //79,129,329
+        //40,331,459
+        Terms().getAllTerms(document, hashes);
+        if(cnt % 1000 == 0) {
+            std::wcout << cnt << std::endl;
+            //break;
+        }
+    }
+    Terms().countStatistics(hashes);
+}
 
-    std::setlocale(LC_ALL,"");
-    std::locale::global(std::locale("en_US.UTF-8") );
-    std::ios_base::sync_with_stdio(false);
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    std::wcin.imbue(std::locale("en_US.UTF-8"));
-    std::wcout.imbue(std::locale("en_US.UTF-8"));
-    std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
+int main_nlp_lab1() {
+    Commons::setLocale();
 
     //"/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json"
-    calcTokenizationStatistics("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    countTerms("/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
     return 0;
 }
 

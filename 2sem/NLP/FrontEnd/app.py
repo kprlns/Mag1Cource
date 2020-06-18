@@ -38,7 +38,7 @@ def perform_query(n_lines, only_headers):
 
 def perform_query_tf_idf(n_lines, only_headers):
     out = subprocess.Popen(
-        './search_tf_idf {0} {1} {2}'.format(query_file_name, n_lines, only_headers),
+        './tf_idf_not_strict {0} {1} {2}'.format(query_file_name, n_lines, only_headers),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, shell=True)
 

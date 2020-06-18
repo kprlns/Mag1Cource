@@ -4,7 +4,7 @@ file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
 
 set(SOURCES ${SOURCES})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -mtune=native")
 
 set(MY_SRC
         myStl/String.h
@@ -21,11 +21,11 @@ set(MY_SRC
         query/QueryParser.h
         query/QueryProcessor.h
         query/QueryOperation.h
-        query/QueryService.h query/FileQueriesProcessor.h dto/TermIndex.h labs/is/lab8.cpp query/ranking/TfIdf.h)
+        query/QueryService.h query/FileQueriesProcessor.h dto/TermIndex.h labs/is/lab8.cpp query/ranking/TfIdf.h myStl/BucketHashMap.h tokenization/Terms.h tokenization/ZiphStatistics.h myStl/BucketHashSet.h)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
 add_executable(${BINARY}_run_nlp ${SOURCES} labs/nlp/lab2.cpp ${MY_SRC})
 
 
 
-add_library(${BINARY}_lib STATIC ${SOURCES} index/Indexer.h index/Index.h Common.h myStl/HashMap.h index/IndexSaver.h)
+add_library(${BINARY}_lib STATIC ${SOURCES} index/Indexer.h index/Index.h Common.h myStl/HashMap.h index/IndexSaver.h myStl/BucketHashMap.h)
