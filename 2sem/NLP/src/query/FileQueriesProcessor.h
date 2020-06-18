@@ -34,9 +34,12 @@ public:
 
     void loadIndexAndPerformQuery(char* queriesFile, bool onlyHeaders, int numRes) {
         BucketIndex* bucketIndex = BucketIndexLoader().load(
-                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Ind",
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Pos",
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Forward"
+/*                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
                 "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos",
-                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward"
+                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward"*/
         );
         bucketIndex->originFilePath = "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json";
 

@@ -21,7 +21,7 @@ set(MY_SRC
         query/QueryParser.h
         query/QueryProcessor.h
         query/QueryOperation.h
-        query/QueryService.h query/FileQueriesProcessor.h dto/TermIndex.h labs/is/lab8.cpp query/ranking/TfIdf.h myStl/BucketHashMap.h tokenization/Terms.h tokenization/ZiphStatistics.h myStl/BucketHashSet.h)
+        query/QueryService.h query/FileQueriesProcessor.h dto/TermIndex.h labs/is/lab8.cpp query/ranking/TfIdf.h myStl/BucketHashMap.h tokenization/Terms.h tokenization/ZiphStatistics.h myStl/BucketHashSet.h tokenization/Stemming.h labs/nlp/lab3.cpp compression/VariableByteEncoder.h)
 
 add_executable(${BINARY}_run ${SOURCES} labs/nlp/lab1.cpp ${MY_SRC})
 add_executable(${BINARY}_run_nlp ${SOURCES} labs/nlp/lab2.cpp ${MY_SRC})

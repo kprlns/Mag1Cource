@@ -81,6 +81,13 @@ public:
         docSizes->add(allHashes->getSize());
         docPositions->add(docPosition);
     }
+    void putAllVectorWithStats(Vector<unsigned long long>* allHashes, int docId, pos_type docPosition) {
+        for(int i = 0; i < allHashes->getSize(); ++i) {
+            putOne(allHashes->get(i), docId);
+        }
+        docSizes->add(allHashes->getSize());
+        docPositions->add(docPosition);
+    }
 
     int getBucketIndex(unsigned long long hash) {
         return (int)(hash >> offset);

@@ -7,6 +7,9 @@
 
 #include <ios>
 #include <clocale>
+#include <iostream>
+#include <chrono>
+
 
 struct DelimeterInteger : std::numpunct<wchar_t> {
     wchar_t do_thousands_sep() const { return L'\u200c'; }
@@ -18,6 +21,9 @@ using pos_type = std::wstreampos ;
 
 static const unsigned long long INITIAL_HASH_VALUE = 5381;
 static inline unsigned long long djb2(unsigned long long currentHash, wchar_t c) {
+    if(c == L'ё') {
+        c = L'е';
+    }
     return
             (currentHash << 53)
             + (currentHash << 29)
