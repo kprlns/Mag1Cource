@@ -27,6 +27,54 @@ public:
         return hashesVector;
     }
 
+    Vector<Vector<unsigned long long>*>* getSentencesStemmedTerms(String<wchar_t>* str, bool isTitle) {
+
+        auto *result = new Vector<Vector<unsigned long long> *>(32);
+        auto *current = new Vector<unsigned long long>(32);
+        if (str == nullptr) {
+            return nullptr;
+        }
+        int size = 0;
+        int start = 0;
+        unsigned long long hash = INITIAL_HASH_VALUE;
+        bool setStart = false;
+        int tmp;
+        for (int i = 0; i < str->getSize(); ++i) {
+            wchar_t currentChar = str->get(i);
+            //std::wcout << "[" << currentChar << "] " << iswalnum(currentChar) << std::endl;
+            if (iswalnum(currentChar)) {
+                if (!setStart) {
+                    setStart = true;
+                    start = i;
+                }
+                size++;
+                hash = djb2(hash, towlower(currentChar));
+                //std::wcout << currentChar;
+            } else {
+                if (size > 0) {
+                    current->add(stemTerm(str, start, i, &tmp));
+                    //std::wcout << " " << hash << std::endl;
+                    hash = INITIAL_HASH_VALUE;
+                    size = 0;
+                }
+                setStart = false;
+                if (!isTitle && Commons::isSentenceSplitter(currentChar) && current->getSize() > 0) {
+                    result->add(current);
+                    current = new Vector<unsigned long long>(32);
+                }
+            }
+        }
+        if (size > 0) {
+            current->add(stemTerm(str, start, str->getSize(), &tmp));
+        }
+        if (current->getSize() > 0) {
+            result->add(current);
+        }
+
+        return result;
+    }
+
+
     void countUniqueTermStatisticsVector(
             String<wchar_t>* str, int* totalLength, Vector<unsigned long long>* hashes) {
         if(str == nullptr) {

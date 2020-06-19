@@ -44,6 +44,10 @@ public:
         std::wcout.imbue(std::locale("en_US.UTF-8"));
         std::wcout.imbue(std::locale(std::wcin.getloc(), new DelimeterInteger));
     }
+
+    static inline bool isSentenceSplitter(wchar_t c) {
+        return c == L'.' || c == L'?' || c == L'!';
+    }
 };
 
 

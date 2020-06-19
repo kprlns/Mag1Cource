@@ -19,6 +19,9 @@ public:
 
         for(int i = 0; i < documents->getSize(); ++i) {
             int currentDoc = documents->get(i);
+            if(index->forwardIndex->get(currentDoc)->getSize() < 10) {
+                continue;
+            }
             double sumTfIdf = 0;
             for(int j = 0; j < operandHashes->getSize(); ++j) {
                 unsigned long long hash = operandHashes->getAtPos(j);

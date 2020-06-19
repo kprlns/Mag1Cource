@@ -26,11 +26,11 @@ int main() {
 
 
     auto startCompr = std::chrono::steady_clock::now();
-    BucketIndex *bucketIndex2 = BucketIndexLoader(true).load(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind_compressed",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos_compressed",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward_compressed"
-    );
+    //BucketIndex *bucketIndex2 = BucketIndexLoader(true).load(
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind_compressed",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos_compressed",
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward_compressed"
+    //);
     auto endCompr = std::chrono::steady_clock::now();
 
     //bucketIndex->printAll();
