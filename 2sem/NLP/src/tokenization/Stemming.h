@@ -8,6 +8,7 @@
 #include "myStl/HashSet.h"
 #include "Tokenization.h"
 #include "Common.h"
+#include "myStl/Pair.h"
 
 class StemmedTerms {
 public:

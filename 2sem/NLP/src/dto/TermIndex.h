@@ -10,7 +10,8 @@
 class TermIndex {
 public:
     int count;
-    //TODO add sum of frequencies
+    TermIndex() {}
+
     TermIndex(int size) {
         count = 0;
         docIds = new Vector<int>(size);

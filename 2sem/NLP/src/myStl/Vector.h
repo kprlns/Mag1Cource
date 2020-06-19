@@ -37,6 +37,8 @@ public:
         std::copy(other.data, other.data + size, data);
     }
     Vector(T* data, int size) {
+        this->data = allocate(size);
+        this->size = size;
         this->maxSize = size;
         std::copy(data, data + size, this->data);
     }
@@ -172,6 +174,9 @@ template<typename T>
 void Vector<T>::resize(int newMaxSize) {
     if(newMaxSize == 0) {
         newMaxSize += 1;
+    }
+    if(newMaxSize < maxSize) {
+        return;
     }
     T* newData = allocate(newMaxSize);
     std::copy(data, data + size, newData);

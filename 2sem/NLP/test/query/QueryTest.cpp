@@ -6,6 +6,7 @@
 #include <query/QueryParser.h>
 #include "gtest/gtest.h"
 #include "myStl/String.h"
+#include "myStl/HashSet.h"
 #include "Common.h"
 
 void setLocaleQ() {
@@ -25,7 +26,7 @@ TEST(QueryTest, test1) {
 
     String<wchar_t> str(L"московский авиационный институт");
 
-    Query* query = QueryParser().parse(&str);
+    Query* query = QueryParser().parse(&str, new HashSet<unsigned long long>(100));
     query->print();
 
     EXPECT_EQ(query->getQuery()->getSize(), 5);
@@ -37,12 +38,12 @@ TEST(QueryTest, test1) {
 }
 
 TEST(QueryTest, test2) {
-    setLocale();
+    Commons::setLocale();
 
 
     String<wchar_t> str(L"(Красный | Желтый) автомобиль");
 
-    Query* query = QueryParser().parse(&str);
+    Query* query = QueryParser().parse(&str, new HashSet<unsigned long long>(100));
     query->print();
 
     EXPECT_EQ(query->getQuery()->getSize(), 7);
@@ -56,12 +57,12 @@ TEST(QueryTest, test2) {
 }
 
 TEST(QueryTest, test3) {
-    setLocale();
+    Commons::setLocale();
 
 
     String<wchar_t> str(L"руки !ноги");
 
-    Query* query = QueryParser().parse(&str);
+    Query* query = QueryParser().parse(&str, new HashSet<unsigned long long>(100));
     query->print();
 
     EXPECT_EQ(query->getQuery()->getSize(), 4);

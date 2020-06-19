@@ -9,12 +9,21 @@
 
 #include <fstream>
 #include <index/BucketIndex.h>
-
+#include "compression/VariableByte.h"
 #define writeFile(file, a) ((file).write((char*)(&(a)), sizeof(a)))
 
 class BucketIndexSaver {
 public:
-
+    bool withVariableByte;
+    Vector<unsigned char>* buffer;
+    BucketIndexSaver() {};
+    BucketIndexSaver(bool withVariableByte) {
+        this->withVariableByte = withVariableByte;
+        buffer = new Vector<unsigned char>(2048);
+    }
+    ~BucketIndexSaver() {
+        delete buffer;
+    }
 
     void save(char* filenameIndex, char* filenamePositions,
             char* filenameTitleForwardIndex, BucketIndex* index) {
@@ -79,13 +88,25 @@ private:
             auto item = index->index->getAtPos(i);
             fileIndex.write((char*)&(item->key), sizeof(item->key));
             int itemValSize = item->value->getSize();
-            fileIndex.write((char*)&itemValSize, sizeof(itemValSize));
-            //TODO fixed?
-            fileIndex.write((char*)&item->getValue()->count, sizeof(item->getValue()->count));
-            fileIndex.write((char*)item->getValue()->docIds->getData(),
-                    sizeof(item->getValue()->docIds->get(0)) * itemValSize);
-            fileIndex.write((char*)item->getValue()->frequencies->getData(),
-                            sizeof(item->getValue()->frequencies->get(0)) * itemValSize);
+            fileIndex.write((char *) &itemValSize, sizeof(itemValSize));
+            fileIndex.write((char *) &item->getValue()->count, sizeof(item->getValue()->count));
+            if(!withVariableByte) {
+                fileIndex.write((char *) item->getValue()->docIds->getData(),
+                                sizeof(item->getValue()->docIds->get(0)) * itemValSize);
+                fileIndex.write((char *) item->getValue()->frequencies->getData(),
+                                sizeof(item->getValue()->frequencies->get(0)) * itemValSize);
+            } else {
+                buffer = VariableByte().encode(item->getValue()->docIds, buffer);
+                int bufferSize = buffer->getSize();
+                fileIndex.write((char *)&bufferSize, sizeof(bufferSize));
+                fileIndex.write((char *)buffer->getData(), sizeof(unsigned char) * bufferSize);
+
+                buffer = VariableByte().encode(item->getValue()->frequencies, buffer);
+                bufferSize = buffer->getSize();
+                fileIndex.write((char *)&bufferSize, sizeof(bufferSize));
+                fileIndex.write((char *)buffer->getData(), sizeof(unsigned char) * bufferSize);
+
+            }
         }
     }
 

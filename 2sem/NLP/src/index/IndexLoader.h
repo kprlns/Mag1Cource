@@ -10,11 +10,21 @@
 #include "index/BucketIndex.h"
 #include "index/Index.h"
 #include "myStl/Pair.h"
-
+#include "compression/VariableByte.h"
 
 class BucketIndexLoader {
 public:
+    bool withVariableByte;
+    Vector<unsigned char>* buffer;
     BucketIndexLoader() {}
+    BucketIndexLoader(bool withVariableByte) {
+        this->withVariableByte = withVariableByte;
+        buffer = new Vector<unsigned char>(4096);
+    }
+    ~BucketIndexLoader() {
+        delete buffer;
+    }
+
 
     BucketIndex* load(char* filenameIndex, char* filenamePositions, char* filenameTitleForwardIndex) {
         auto start = std::chrono::steady_clock::now();
@@ -25,8 +35,8 @@ public:
         index->titleIndexFilePath = filenameTitleForwardIndex;
 
         loadIndex(filenameIndex, index, flags);
-        loadPositions(filenamePositions, index, flags);
-        loadTitleForwardIndex(filenameTitleForwardIndex, index, flags);
+        //loadPositions(filenamePositions, index, flags);
+        //loadTitleForwardIndex(filenameTitleForwardIndex, index, flags);
         auto end = std::chrono::steady_clock::now();
         //std::wcout << L"Load time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
@@ -53,11 +63,30 @@ public:
             //std::wcout << "Size: " << indexSize << std::endl << "Hash: " << hash << std::endl;
 
             TermIndex* indices = new TermIndex(indexSize);
-            indices->docIds->setSize(indexSize);
-            indices->frequencies->setSize(indexSize);
             fileIndex.read((char*)&indices->count, sizeof(indices->count));
-            fileIndex.read((char*)indices->docIds->getData(), sizeof(int) * indexSize);
-            fileIndex.read((char*)indices->frequencies->getData(), sizeof(int) * indexSize);
+
+            if(!withVariableByte) {
+                indices->docIds->setSize(indexSize);
+                indices->frequencies->setSize(indexSize);
+                fileIndex.read((char *) indices->docIds->getData(), sizeof(int) * indexSize);
+                fileIndex.read((char *) indices->frequencies->getData(), sizeof(int) * indexSize);
+            } else {
+                int currentSize;
+                fileIndex.read((char*)&currentSize, sizeof(currentSize));
+                buffer->clear();
+                buffer->resize(currentSize);
+                buffer->setSize(currentSize);
+                fileIndex.read((char *) buffer->getData(), sizeof(unsigned char) * currentSize);
+                indices->docIds = VariableByte().decode(buffer, indices->docIds);
+
+                fileIndex.read((char*)&currentSize, sizeof(currentSize));
+                buffer->clear();
+                buffer->resize(currentSize);
+                buffer->setSize(currentSize);
+                fileIndex.read((char *) buffer->getData(), sizeof(unsigned char) * currentSize);
+                indices->frequencies = VariableByte().decode(buffer, indices->frequencies);
+
+            }
             //for (int j = 0; j < indexSize; ++j) {
             //    fileIndex >> tmp;
             //    indices->add(tmp);

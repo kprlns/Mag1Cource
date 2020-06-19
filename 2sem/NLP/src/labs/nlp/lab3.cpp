@@ -13,7 +13,7 @@
 #include <query/FileQueriesProcessor.h>
 
 
-int main(int argc, char* argv[]) {
+int main_iefnwif(int argc, char* argv[]) {
     Commons::setLocale();
 
     //BucketIndex *bucketIndex = Indexer().bucketIndexFile(

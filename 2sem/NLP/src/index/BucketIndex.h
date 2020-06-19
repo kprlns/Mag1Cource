@@ -154,6 +154,68 @@ public:
         }
         return size;
     }
+
+    bool equals(BucketIndex* other) {
+        return equalsPos(other) && equalsForwardIndex(other) && equalsIndex(other);
+    }
+    bool equalsPos(BucketIndex* other) {
+        return *this->docPositions == *other->docPositions;
+    }
+    bool equalsForwardIndex(BucketIndex* other) {
+        auto firstIndex = forwardIndex;
+        auto secondIndex = other->forwardIndex;
+        if(firstIndex->getSize() != secondIndex->getSize()) {
+            return false;
+        }
+        for(int i = 0; i < firstIndex->getSize(); ++i) {
+            auto firstMap = firstIndex->get(i);
+            auto secondMap = secondIndex->get(i);
+            if(firstMap->getSize() != secondMap->getSize()) {
+                return false;
+            }
+            for(int j = 0; j < firstMap->getSize(); ++j) {
+                auto firstEl = firstMap->getAtPos(j);
+                auto secondEl = secondMap->getAtPos(j);
+                if(!((firstEl->key == secondEl->key) && (firstEl->value == secondEl->value))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    bool equalsIndex(BucketIndex* other) {
+        auto firstIndex = indexBuckets;
+        auto secondIndex = other->indexBuckets;
+        if(firstIndex->getSize() != secondIndex->getSize()) {
+            return false;
+        }
+        for(int i = 0; i < firstIndex->getSize(); ++i) {
+            auto firstMap = firstIndex->get(i)->index;
+            auto secondMap = secondIndex->get(i)->index;
+            if(firstMap->getSize() != secondMap->getSize()) {
+                return false;
+            }
+            for(int j = 0; j < firstMap->getSize(); ++j) {
+                auto firstEl = firstMap->getAtPos(j);
+                auto secondEl = secondMap->getAtPos(j);
+                if((firstEl->getKey() != secondEl->getKey())
+                || (firstEl->getValue()->getSize() != secondEl->getValue()->getSize())
+                || (firstEl->getValue()->count != secondEl->getValue()->count))
+                {
+                    return false;
+                }
+
+                for(int k = 0; k < firstEl->getValue()->getSize(); ++k) {
+                    if(! ((firstEl->value->docIds->get(k) == firstEl->value->docIds->get(k))
+                    && (firstEl->value->frequencies->get(k) == firstEl->value->frequencies->get(k)))) {
+                        return false;
+                    }
+                }
+            }
+
+        }
+        return true;
+    }
 };
 
 
