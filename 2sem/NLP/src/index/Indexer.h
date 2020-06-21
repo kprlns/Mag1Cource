@@ -73,7 +73,7 @@ public:
             index->putAllVector(hashes, cnt - 1, document->getPosition());
             index->putTitleForwardIndex(hashes);
             delete hashes;
-            if(cnt % 1000 == 0) {
+            if(cnt % 1000 == 0 || cnt > 107200) {
                 std::wcout << cnt << std::endl;
                 //break;
             }

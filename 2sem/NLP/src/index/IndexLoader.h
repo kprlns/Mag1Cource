@@ -35,8 +35,8 @@ public:
         index->titleIndexFilePath = filenameTitleForwardIndex;
 
         loadIndex(filenameIndex, index, flags);
-        //loadPositions(filenamePositions, index, flags);
-        //loadTitleForwardIndex(filenameTitleForwardIndex, index, flags);
+        loadPositions(filenamePositions, index, flags);
+        loadTitleForwardIndex(filenameTitleForwardIndex, index, flags);
         auto end = std::chrono::steady_clock::now();
         //std::wcout << L"Load time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
@@ -107,6 +107,11 @@ public:
         filePositions.read((char*)&positionsSize, sizeof(positionsSize));
         index->docPositions->setSize(positionsSize);
         filePositions.read((char*)index->docPositions->getData(), sizeof(pos_type) * positionsSize);
+        //std::wcout << index->docPositions->getSize() << std::endl;
+        //for(int i = 0; i < index->docPositions->getSize() && i < 107302; i++) {
+        //    std::wcout << index->docPositions->get(i) << L" ";
+        //}
+        //std::wcout << std::endl;
         //for(int i = 0; i < positionsSize; ++i) {
         //    filePositions >> position;
         //    index->docPositions->add(pos_type(position));

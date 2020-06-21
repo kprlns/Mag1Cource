@@ -13,23 +13,23 @@
 #include <query/FileQueriesProcessor.h>
 
 
-int main_iefnwif(int argc, char* argv[]) {
+int main_orjn(int argc, char* argv[]) {
     Commons::setLocale();
 
-    //BucketIndex *bucketIndex = Indexer().bucketIndexFile(
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    BucketIndex *bucketIndex = Indexer().bucketIndexFile(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
 
-    Indexer().countStats(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
+    //Indexer().countStats(
+    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
     //bucketIndex->printAll();
-/*
-    BucketIndexSaver().save(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Ind",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Pos",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Forward",
+
+    BucketIndexSaver(true).save(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Ind_compressed1",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Pos_compressed1",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Forward_compressed1",
             bucketIndex
     );
-*/
+
     //FileQueriesProcessor().loadIndexAndPerformQuery(argv[1], atoi(argv[3]) != 0, atoi(argv[2]));
 
 }

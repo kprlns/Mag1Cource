@@ -8,9 +8,11 @@
 #include <index/BucketIndex.h>
 #include <parser/CorpusParser.h>
 #include <index/IndexLoader.h>
+#include <query/snippets/SnippetGenerator.h>
 #include "QueryService.h"
 #include "query/ranking/TfIdf.h"
 #include "iomanip"
+#include "HtmlGenerator.h"
 
 class FileQueriesProcessor {
 public:
@@ -33,15 +35,15 @@ public:
     }
 
     void loadIndexAndPerformQuery(char* queriesFile, bool onlyHeaders, int numRes) {
-        BucketIndex* bucketIndex = BucketIndexLoader().load(
-                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Ind",
-                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Pos",
-                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_stem_Forward"
+        BucketIndex* bucketIndex = BucketIndexLoader(true).load(
+                "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Ind_compressed1",
+                "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Pos_compressed1",
+                "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Forward_compressed1"
 /*                "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
                 "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos",
                 "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward"*/
         );
-        bucketIndex->originFilePath = "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json";
+        bucketIndex->originFilePath = "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json";
 
         auto start = std::chrono::steady_clock::now();
         performAllFromFileAndPrintAsHtml(bucketIndex, queriesFile, onlyHeaders, numRes);
@@ -70,19 +72,53 @@ public:
             auto startRank = std::chrono::steady_clock::now();
             Vector<Pair<double, int>*>* rankedRes = TfIdf().ranking(res, operandHashes, index);
             auto endRank = std::chrono::steady_clock::now();
+            Vector<Pair<double, int>*>* top100 = getTop(rankedRes, 100);
+            auto startSnippets = std::chrono::steady_clock::now();
+            Vector<Document*>* documents = resolveDocuments(top100, index);
+            Vector<SnippetGeneratorResult*>* snippetResult = SnippetGenerator(index).findSnippets(operandHashes, top100, documents, index);
+            auto endSnippets = std::chrono::steady_clock::now();
+
+            auto startOut = std::chrono::steady_clock::now();
+            HtmlGenerator(index, operandHashes).printAllDocumentsWithSnippets(documents, snippetResult, onlyHeaders, numRes);
+            auto endOut = std::chrono::steady_clock::now();
 
 
             //long pageFormTime = resolveResultAndPrint(res, index, onlyHeaders, numRes);
-            long pageFormTime = resolveResultAndPrintRankedResult(rankedRes, index, onlyHeaders, numRes);
+            //long pageFormTime = resolveResultAndPrintRankedResult(rankedRes, index, onlyHeaders, numRes);
+
 
             std::wcout << L"\n<p>Найдено результатов: " << res->getSize() << L"</p>";
             std::wcout << L"\n<p>Время поиска по индексу: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"</p>";
             std::wcout << L"\n<p>Время ранжирования: " << std::chrono::duration_cast<std::chrono::microseconds>(endRank - startRank).count() << L"</p>";
-            std::wcout << L"\n<p>Время поиска формирования выдачи: " << pageFormTime << L"</p>";
+            std::wcout << L"\n<p>Время построения сниппетов: " << std::chrono::duration_cast<std::chrono::microseconds>(endSnippets - startSnippets).count() << L"</p>";
+            std::wcout << L"\n<p>Время поиска формирования выдачи: " << std::chrono::duration_cast<std::chrono::microseconds>(endOut - startOut).count() << L"</p>";
             //QueryOperation::printVector(res);
             delete res;
         }
     }
+
+    Vector<Pair<double, int>*>* getTop(Vector<Pair<double, int>*>* rankedRes, int n) {
+        auto* res = new Vector<Pair<double, int>*>(100);
+        for(int i = rankedRes->getSize() - 1; i >= 0 && n > 0; --i) {
+            res->add(rankedRes->get(i));
+            n--;
+        }
+        return res;
+    }
+
+    Vector<Document*>* resolveDocuments(Vector<Pair<double, int>* >* rankedRes, BucketIndex* index) {
+        Vector<Document*>* res = new Vector<Document*>(100);
+        CorpusParser parser(index->originFilePath);
+        int cnt = 0;
+        for (int i = 0; i < rankedRes->getSize(); ++i) {
+            parser.setPosition(index->getPosition(rankedRes->get(i)->getValue()));
+            res->add(parser.getNextDocument());
+            res->getLast()->setDocId(rankedRes->get(i)->value);
+            cnt++;
+        }
+        return res;
+    }
+
     long resolveResultAndPrintRankedResult(Vector<Pair<double, int>*>* res, BucketIndex* index, bool onlyHeaders, int numRes) {
         CorpusParser parser(index->originFilePath);
         auto start = std::chrono::steady_clock::now();

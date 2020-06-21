@@ -42,6 +42,10 @@ public:
             }
             std::getline(input, tmpString, L'\n');
             cntLine++;
+            if(tmpString.size() == 0) {
+                delete document;
+                return nullptr;
+            }
             //std::wcout << cntLine << std::endl;
             //std::wcout << tmpString << std::endl;
             String<wchar_t> line(tmpString.data(), tmpString.length());

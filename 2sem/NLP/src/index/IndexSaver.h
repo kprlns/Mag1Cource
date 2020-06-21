@@ -22,7 +22,9 @@ public:
         buffer = new Vector<unsigned char>(2048);
     }
     ~BucketIndexSaver() {
-        delete buffer;
+        if(buffer != nullptr) {
+            delete buffer;
+        }
     }
 
     void save(char* filenameIndex, char* filenamePositions,

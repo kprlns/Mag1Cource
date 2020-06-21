@@ -34,6 +34,12 @@ public:
                 if(size > 0) {
                     //std::wcout << L" ";
                     hash = stemmer.stemTerm(string, start, i, &tmp);
+                    //todo remove
+                    //for(int k = start; k < i; ++k) {
+                    //    std::wcout << string->get(k);
+                    //}
+                    //std::wcout << L" " << hash << std::endl;
+
                     result->validateAndAdd(hash);
                     operandHashes->put(hash);
                     hash = INITIAL_HASH_VALUE;
@@ -48,6 +54,12 @@ public:
         if(size > 0) {
             //std::wcout << " ";
             hash = stemmer.stemTerm(string, start, string->getSize(), &tmp);
+            //todo remove
+            //for(int k = start; k < string->getSize(); ++k) {
+            //    std::wcout << string->get(k);
+            //}
+            //std::wcout << L" " << hash << std::endl;
+
             operandHashes->put(hash);
             result->validateAndAdd(hash);
         }

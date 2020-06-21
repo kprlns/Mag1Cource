@@ -28,12 +28,13 @@ public:
     }
 
     Vector<Vector<unsigned long long>*>* getSentencesStemmedTerms(String<wchar_t>* str, bool isTitle) {
-
-        auto *result = new Vector<Vector<unsigned long long> *>(32);
-        auto *current = new Vector<unsigned long long>(32);
         if (str == nullptr) {
             return nullptr;
         }
+        //std::wcout << "Started stemming: " << std::endl;
+        //str->print();
+        auto *result = new Vector<Vector<unsigned long long> *>(32);
+        auto *current = new Vector<unsigned long long>(32);
         int size = 0;
         int start = 0;
         unsigned long long hash = INITIAL_HASH_VALUE;

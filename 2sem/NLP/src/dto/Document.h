@@ -30,11 +30,14 @@ public:
     [[nodiscard]] String<wchar_t>* getTitle() const { return title; }
     [[nodiscard]] String<wchar_t>* getText() const { return text; }
     [[nodiscard]] pos_type getPosition() const { return position; }
+    [[nodiscard]] int getDocId() const { return docId; }
 
     void setId(long long int id) { this->id = id; }
     void setTitle(String<wchar_t>* title) { this->title = title; }
     void setText(String<wchar_t>* text) { this->text = text; }
     void setPosition(pos_type position) { this->position = position; }
+    void setDocId(int id) { this->docId = id; }
+
 
     void print() {
         std::wcout << "Title: [";
@@ -50,6 +53,7 @@ private:
     String<wchar_t>* title;
     String<wchar_t>* text;
     pos_type position;
+    int docId;
 };
 
 

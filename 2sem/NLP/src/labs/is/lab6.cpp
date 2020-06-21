@@ -8,7 +8,7 @@
 #include <index/IndexSaver.h>
 #include "Common.h"
 
-int main() {
+int main_ewjknewp() {
     Commons::setLocale();
     //std::wcout << L"!!" << sizeof(char);
     //std::wcout << L"!!!" << (0b10000000);
