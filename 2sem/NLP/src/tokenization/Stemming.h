@@ -14,9 +14,20 @@ class StemmedTerms {
 public:
     HashSet<unsigned long long> *reverseEndingHashes;
     const int MAX_ENDING_SIZE = 3;
+    Vector<Vector<unsigned long long>*>* buffer;
     StemmedTerms() {
         reverseEndingHashes = new HashSet<unsigned long long>(128);
         putAllEndings();
+        buffer = new Vector<Vector<unsigned long long>*>(3);
+        buffer->add(new Vector<unsigned long long>(256));
+        buffer->add(new Vector<unsigned long long>(256));
+        buffer->add(new Vector<unsigned long long>(256));
+    }
+    ~StemmedTerms() {
+        delete buffer->get(0);
+        delete buffer->get(1);
+        delete buffer->get(2);
+        delete reverseEndingHashes;
     }
 
     Vector<unsigned long long>* getDocumentTermHashesVector(Document* document) {
@@ -25,6 +36,125 @@ public:
         countUniqueTermStatisticsVector(document->getTitle(), &tmp, hashesVector);
         countUniqueTermStatisticsVector(document->getText(), &tmp, hashesVector);
         return hashesVector;
+    }
+
+    Vector<Vector<unsigned long long>*>* getDocumentStemmedTermHashesVectorWithZones(Document* document, int nZones) {
+        buffer->get(0)->setSize(0);
+        buffer->get(1)->setSize(0);
+        buffer->get(2)->setSize(0);
+        getZonedStemmedTerms(document->getTitle(), true, nZones);
+        getZonedStemmedTerms(document->getText(), false, nZones);
+        return buffer;
+    }
+    Vector<Vector<unsigned long long>*>* getDocumentTermHashesVectorWithZones(Document* document, int nZones) {
+        buffer->get(0)->setSize(0);
+        buffer->get(1)->setSize(0);
+        buffer->get(2)->setSize(0);
+        getZonedTerms(document->getTitle(), true, nZones);
+        getZonedTerms(document->getText(), false, nZones);
+        return buffer;
+    }
+
+    Vector<Vector<unsigned long long>*>* getZonedTerms(String<wchar_t>* str, bool isTitle, int zoneSize) {
+        if (str == nullptr) {
+            return buffer;
+        }
+        Vector<unsigned long long>* current;
+        if(isTitle) {
+            current = buffer->get(0);
+        } else {
+            current = buffer->get(1);
+        }
+        int size = 0;
+        int start = 0;
+        unsigned long long hash = INITIAL_HASH_VALUE;
+        bool setStart = false;
+        int tmp;
+        int zoneCnt = 0;
+        for (int i = 0; i < str->getSize(); ++i) {
+            wchar_t currentChar = str->get(i);
+            //std::wcout << "[" << currentChar << "] " << iswalnum(currentChar) << std::endl;
+            if (iswalnum(currentChar)) {
+                if (!setStart) {
+                    setStart = true;
+                    start = i;
+                }
+                size++;
+                hash = djb2(hash, towlower(currentChar));
+                //std::wcout << currentChar;
+            } else {
+                if (size > 0) {
+                    current->add(hash);
+                    //current->add(stemTerm(str, start, i, &tmp));
+                    //std::wcout << " " << hash << std::endl;
+                    hash = INITIAL_HASH_VALUE;
+                    size = 0;
+                }
+                setStart = false;
+                if (!isTitle && Commons::isSentenceSplitter(currentChar)) {
+                    zoneCnt++;
+                    if(zoneCnt >= zoneSize) {
+                        current = buffer->get(2);
+                    }
+                }
+            }
+        }
+        if (size > 0) {
+            current->add(hash);
+            //current->add(stemTerm(str, start, str->getSize(), &tmp));
+        }
+
+        return buffer;
+    }
+
+    Vector<Vector<unsigned long long>*>* getZonedStemmedTerms(String<wchar_t>* str, bool isTitle, int zoneSize) {
+        if (str == nullptr) {
+            return buffer;
+        }
+        Vector<unsigned long long>* current;
+        if(isTitle) {
+            current = buffer->get(0);
+        } else {
+            current = buffer->get(1);
+        }
+        int size = 0;
+        int start = 0;
+        unsigned long long hash = INITIAL_HASH_VALUE;
+        bool setStart = false;
+        int tmp;
+        int zoneCnt = 0;
+        for (int i = 0; i < str->getSize(); ++i) {
+            wchar_t currentChar = str->get(i);
+            //std::wcout << "[" << currentChar << "] " << iswalnum(currentChar) << std::endl;
+            if (iswalnum(currentChar)) {
+                if (!setStart) {
+                    setStart = true;
+                    start = i;
+                }
+                size++;
+                hash = djb2(hash, towlower(currentChar));
+                //std::wcout << currentChar;
+            } else {
+                if (size > 0) {
+                    current->add(stemTerm(str, start, i, &tmp));
+                    //std::wcout << " " << hash << std::endl;
+                    hash = INITIAL_HASH_VALUE;
+                    size = 0;
+                }
+                setStart = false;
+                if (!isTitle && Commons::isSentenceSplitter(currentChar)) {
+                    zoneCnt++;
+                    if(zoneCnt >= zoneSize) {
+                        current = buffer->get(2);
+                    }
+                }
+            }
+        }
+        if (size > 0) {
+            current->add(stemTerm(str, start, str->getSize(), &tmp));
+        }
+
+        return buffer;
     }
 
     Vector<Vector<unsigned long long>*>* getSentencesStemmedTerms(String<wchar_t>* str, bool isTitle) {

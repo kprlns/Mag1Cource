@@ -21,10 +21,11 @@ public:
     bool titleSnippet;
     int snippetSentenceIndex;
     double maxSnippetWeight;
+    double sum;
     //Vector<double>* tf;
     Vector<double>* weights;
     SnippetGeneratorResult(double tfIdf, /*double titleWeight, double textWeight,*/
-            bool isSnippetInTitle, int sentence, double maxWeight, Vector<double>* weight) {
+            bool isSnippetInTitle, int sentence, double maxWeight, Vector<double>* weight, double sum) {
         this->tfIdf = tfIdf;
         //titleSnippetWeight = titleWeight;
         //textSnippetWeight = textWeight;
@@ -32,6 +33,7 @@ public:
         snippetSentenceIndex = sentence;
         weights = weight;
         maxSnippetWeight = maxWeight;
+        this->sum = sum;
     }
 
 };
@@ -63,6 +65,13 @@ public:
         }
 
         for (int i = 0; i < ranks->getSize(); ++i) {
+
+            if(documents->get(i)->getTitle()->startsWith(L"Файл:")
+               || documents->get(i)->getTitle()->startsWith(L"Категория:")
+               || documents->get(i)->getTitle()->startsWith(L"Обсуждение:")
+               || documents->get(i)->getTitle()->startsWith(L"Шаблон:")) {
+                continue;
+            }
             result->add(findDocumentSnippet(operandHashes, stemmer, documents->get(i), ranks->get(i)->getKey()));
             cnt += 1;
         }
@@ -88,9 +97,11 @@ public:
 
         double maxWeight = textSnippetWeights->get(0);
         int snippetSentenceInd = 0;
+        double sum = 0;
         double multiplier = 0.9;
         for(int i = 0; i < textSentenceTerms->getSize(); ++i) {
             double currentWeight = multiplier * evaluateWeight(textSentenceTerms->get(i), operandHashes, 0.04, 0.03, document->getDocId());
+            sum += currentWeight;
             textSnippetWeights->add(currentWeight);
             if(maxWeight < currentWeight) {
                 maxWeight = currentWeight;
@@ -99,7 +110,7 @@ public:
             }
             multiplier *= 0.9;
         }
-        return new SnippetGeneratorResult(tfIdf, isTitle, snippetSentenceInd, maxWeight, textSnippetWeights);
+        return new SnippetGeneratorResult(tfIdf, isTitle, snippetSentenceInd, maxWeight, textSnippetWeights, sum);
     }
 
     double evaluateWeight(Vector<unsigned long long>* sentence, HashSet<unsigned long long>* operandHashes, double baseTermValue, double increase, int docId) {

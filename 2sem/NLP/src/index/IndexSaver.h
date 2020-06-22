@@ -109,6 +109,8 @@ private:
                 fileIndex.write((char *)buffer->getData(), sizeof(unsigned char) * bufferSize);
 
             }
+            fileIndex.write((char*)item->getValue()->flags->getData(),
+                    sizeof(item->getValue()->flags->get(0)) * item->getValue()->flags->getSize());
         }
     }
 

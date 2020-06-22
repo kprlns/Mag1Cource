@@ -29,11 +29,11 @@ public:
                 }
                 //std::wcout << (wchar_t)tolower(current);
                 size++;
-                //hash = djb2(hash, towlower(current));
+                hash = djb2(hash, towlower(current));
             } else {
                 if(size > 0) {
                     //std::wcout << L" ";
-                    hash = stemmer.stemTerm(string, start, i, &tmp);
+                    //hash = stemmer.stemTerm(string, start, i, &tmp);
                     //todo remove
                     //for(int k = start; k < i; ++k) {
                     //    std::wcout << string->get(k);
@@ -53,7 +53,7 @@ public:
         }
         if(size > 0) {
             //std::wcout << " ";
-            hash = stemmer.stemTerm(string, start, string->getSize(), &tmp);
+            //hash = stemmer.stemTerm(string, start, string->getSize(), &tmp);
             //todo remove
             //for(int k = start; k < string->getSize(); ++k) {
             //    std::wcout << string->get(k);
@@ -64,6 +64,36 @@ public:
             result->validateAndAdd(hash);
         }
 
+        if(!isOp && result->getSize() > 1) {
+            int cntOperand = 0;
+            int cntOr = 0;
+            QueryItem* prevOperand;
+            auto resultTmp = new Query();
+            //result->print();
+            for(int i = 0; i < result->getSize(); ++i) {
+                if(result->get(i)->isOperand()) {
+                    if(cntOperand == 0) {
+                        prevOperand = result->get(i);
+                    }
+                    else {
+                        if(cntOr > 0) {
+                            resultTmp->validateAndAdd(OR_OPERATOR);
+                        }
+                        resultTmp->validateAndAdd(OPEN_PARENTHESIS);
+                        resultTmp->validateAndAdd(prevOperand->operandHash);
+                        resultTmp->validateAndAdd(AND_OPERATOR);
+                        resultTmp->validateAndAdd(result->get(i)->operandHash);
+                        resultTmp->validateAndAdd(CLOSE_PARENTHESIS);
+                        cntOr++;
+                        prevOperand = result->get(i);
+                    }
+                    cntOperand++;
+                }
+                //resultTmp->print();
+            }
+            delete result;
+            result = resultTmp;
+        }
         //result->print();
         //std::wcout << std::endl;
         return result;

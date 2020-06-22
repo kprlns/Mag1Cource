@@ -55,6 +55,19 @@ public:
         }
         return setItem;
     }
+    HashMapItem<unsigned long long, TermIndex*> putOneWithFlags(unsigned long long hash, int docId, unsigned long long flags) {
+        //auto newPair = new Pair<unsigned long long, Vector<int>*>(hash, nullptr);
+        auto setItem = index->put(hash, nullptr);
+        if(setItem.item->value == nullptr) {
+            setItem.item->value = new TermIndex(64);
+        }
+        if((setItem.item->value->getSize() == 0) || (docId != setItem.item->value->docIds->getLast())) {
+            setItem.item->value->add(docId,1, flags);
+        } else {
+            setItem.item->value->increaseFreqLast(1);
+        }
+        return setItem;
+    }
 
     HashMapItem<unsigned long long, TermIndex*> get(unsigned long long hash) {
         return index->get(hash);
@@ -77,7 +90,8 @@ public:
             std::wcout << std::bitset<64>(pair->key) << " ";
             std::wcout << pair->key << " : ";
             for(int j = 0; j < pair->value->getSize(); ++j) {
-                std::wcout << L"( " << pair->value->docIds->get(j) << L", " << pair->value->frequencies->get(j) << L") ";
+                std::wcout << L"( " << pair->value->docIds->get(j) << L", " << pair->value->frequencies->get(j)
+                 << L" | " << pair->value->flags->get(j) << L") ";
             }
             std::wcout << L" [ " << pair->value->count << " ] ";
             std::wcout << std::endl;

@@ -10,22 +10,22 @@ metric4 = Err()
 
 level = 5
 print('Precision')
-lines = open("labl2_stats/snippet.txt").readlines()
+lines = open("labl2_stats/zoned.txt").readlines()
 print('--\n' + str(metric1.evaluate(lines, level)))
 print('------')
 
 print('Dcg')
-lines = open("labl2_stats/snippet.txt").readlines()
+lines = open("labl2_stats/zoned.txt").readlines()
 print('--\n' + str(metric2.evaluate(lines, level)))
 print('------')
 
 print('Ndcg')
-lines = open("labl2_stats/snippet.txt").readlines()
+lines = open("labl2_stats/zoned.txt").readlines()
 print('--\n' + str(metric3.evaluate(lines, level)))
 print('------')
 
 print('Err')
-lines = open("labl2_stats/snippet.txt").readlines()
+lines = open("labl2_stats/zoned.txt").readlines()
 print('--\n' + str(metric4.evaluate(lines, level)))
 print('------')
 

@@ -51,7 +51,7 @@ public:
             auto lastInserted = query->getLast();
             if(lastInserted->getItemType() == OPERAND || lastInserted->getItemType() == CLOSE_PARENTHESIS) {
                 //std::wcout << L"&";
-                query->add(new QueryItem(AND_OPERATOR));
+                query->add(new QueryItem(OR_OPERATOR));
             }
         }
 

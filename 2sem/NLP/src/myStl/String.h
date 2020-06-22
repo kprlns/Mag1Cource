@@ -91,6 +91,22 @@ public:
     Vector<String<T>*>* split(T splitter);
     Vector<String<T>*>* splitIfContains(T splitter);
 
+    bool startsWith(String<T>* other) {
+        if(this->getSize() < other->getSize()) {
+            return false;
+        }
+        for(int i = 0; i < other->getSize(); ++i) {
+            if(get(i) != other->get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    bool startsWith(const T* other) {
+        String cmp(other);
+        return this->startsWith(&cmp);
+    }
+
 private:
     Vector<T> string;
     bool isHashRelevant = false;

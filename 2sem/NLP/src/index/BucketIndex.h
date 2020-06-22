@@ -68,6 +68,24 @@ public:
         forwardIndex->add(currentForwardIndex);
     }
 
+    void putTitleForwardIndexFromBuffer(Vector<Vector<unsigned long long>*>* forward) {
+        auto* currentForwardIndex = new HashMap<unsigned long long, int>(128);
+        //forwardIndex->add(titleIndex);
+        putAllBuffer(currentForwardIndex, forward->get(0));
+        putAllBuffer(currentForwardIndex, forward->get(1));
+        putAllBuffer(currentForwardIndex, forward->get(2));
+
+        forwardIndex->add(currentForwardIndex);
+    }
+    void putAllBuffer(HashMap<unsigned long long, int>* currIndex, Vector<unsigned long long>* hashes) {
+        for(int i = 0; i < hashes->getSize(); ++i) {
+            HashMapItem<unsigned long long, int> inserted =
+                    currIndex->put(hashes->get(i), 0);
+            inserted.item->value += 1;
+        }
+    }
+
+
     void putAll(HashSet<unsigned long long>* allHashes, int docId, pos_type docPosition) {
         for(int i = 0; i < allHashes->getSize(); ++i) {
             putOne(allHashes->getAtPos(i), docId);
@@ -81,6 +99,30 @@ public:
         docSizes->add(allHashes->getSize());
         docPositions->add(docPosition);
     }
+    void putAllFromStemmerBuffer(Vector<Vector<unsigned long long>*>* buffer, int docId, pos_type docPosition) {
+        putAllBuffer(buffer->get(0), docId, TITLE);
+        putAllBuffer(buffer->get(1), docId, FIRST_FIVE);
+        putAllBuffer(buffer->get(2), docId, OTHER);
+        docSizes->add(buffer->get(0)->getSize()
+                      + buffer->get(1)->getSize()
+                      + buffer->get(2)->getSize()
+        );
+        docPositions->add(docPosition);
+    }
+    void putAllBuffer(Vector<unsigned long long>* buffer, int docId, unsigned char flags) {
+        for(int i = 0; i < buffer->getSize(); ++i) {
+            putOne(buffer->get(i), docId, flags);
+        }
+    }
+
+    void putAllVectorWithZones(Vector<unsigned long long>* allHashes, int docId, pos_type docPosition, unsigned char flags) {
+        for(int i = 0; i < allHashes->getSize(); ++i) {
+            putOne(allHashes->get(i), docId, flags);
+        }
+        docSizes->add(allHashes->getSize());
+        docPositions->add(docPosition);
+    }
+
     void putAllVectorWithStats(Vector<unsigned long long>* allHashes, int docId, pos_type docPosition) {
         for(int i = 0; i < allHashes->getSize(); ++i) {
             putOne(allHashes->get(i), docId);
@@ -96,6 +138,10 @@ public:
     void putOne(unsigned long long hash, int docId) {
         int bucket = (int)(hash >> offset);
         indexBuckets->get(bucket)->putOne(hash, docId);
+    }
+    void putOne(unsigned long long hash, int docId, unsigned char flags) {
+        int bucket = (int)(hash >> offset);
+        indexBuckets->get(bucket)->putOneWithFlags(hash, docId, flags);
     }
 
     void putOneWithFrequencies(unsigned long long hash, int docId) {
@@ -207,7 +253,8 @@ public:
 
                 for(int k = 0; k < firstEl->getValue()->getSize(); ++k) {
                     if(! ((firstEl->value->docIds->get(k) == firstEl->value->docIds->get(k))
-                    && (firstEl->value->frequencies->get(k) == firstEl->value->frequencies->get(k)))) {
+                    && (firstEl->value->frequencies->get(k) == firstEl->value->frequencies->get(k))
+                    && (firstEl->value->flags->get(k) == firstEl->value->flags->get(k)) )) {
                         return false;
                     }
                 }

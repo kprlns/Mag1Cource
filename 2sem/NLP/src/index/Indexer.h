@@ -52,6 +52,59 @@ public:
         return index;
     }
 
+    BucketIndex* bucketIndexWithZones(char* filename) {
+        StemmedTerms stemmer;
+        BucketIndex* index = new BucketIndex();
+        index->originFilePath = filename;
+        CorpusParser parser(filename);
+        int totalLength = 0;
+        auto start = std::chrono::steady_clock::now();
+        int cnt = 0;
+        while (true) {
+            cnt++;
+            Document *document = parser.getNextDocument();
+            if(document == nullptr) {
+                break;
+            }
+            //79,129,329
+            //40,331,459
+            //auto hashes = Tokenization::getDocumentTermHashesVector(document);
+
+            auto stemmerBuffer = stemmer.getDocumentTermHashesVectorWithZones(document, 5);
+
+            //index->putAllVector(hashes, cnt - 1, document->getPosition());
+            index->putAllFromStemmerBuffer(stemmerBuffer, cnt - 1, document->getPosition());
+            //index->putTitleForwardIndex(hashes);
+            index->putTitleForwardIndexFromBuffer(stemmerBuffer);
+
+            //delete hashes;
+            if(cnt % 1000 == 0) {
+                std::wcout << cnt << std::endl;
+                //break;
+            }
+            delete document;
+
+        }
+        auto end = std::chrono::steady_clock::now();
+
+        std::wcout << L"Total length: " << totalLength << L"\n";
+        std::wcout << L"Total tokens: " << index->getSize() << L"\n";
+        //std::wcout << L"Total docs: " << totalDocs << L"\n";
+        std::wcout << L"Elapsed time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+        std::vector<int> sz;
+        for(int i = 0; i < index->indexBuckets->getSize(); ++i) {
+            sz.push_back(index->indexBuckets->get(i)->index->getSize());
+        }
+        std::sort(sz.begin(), sz.end());
+        std::wcout << L"Min bucket size: " << sz[0] << std::endl;
+        std::wcout << L"Max bucket size: " << sz[sz.size() - 1] << std::endl;
+        std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
+        std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
+        std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
+        return index;
+    }
+
+
     BucketIndex* bucketIndexFile(char* filename) {
         StemmedTerms stemmer;
         BucketIndex* index = new BucketIndex();
@@ -96,8 +149,6 @@ public:
         std::wcout << L"1/4 bucket size: " << sz[sz.size() / 4] << std::endl;
         std::wcout << L"3/4 bucket size: " << sz[sz.size() * 3 / 4] << std::endl;
         std::wcout << L"Avg bucket size: " << sz[sz.size() / 2] << std::endl;
-
-
         return index;
     }
 

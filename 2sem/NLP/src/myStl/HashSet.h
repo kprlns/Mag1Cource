@@ -14,6 +14,7 @@ public:
     HashSetItem() = default;
     bool found{};
     T item;
+    int index;
 };
 
 
@@ -76,6 +77,7 @@ public:
         } else {
             result.found = true;
             result.item = set->get(res);
+            result.index = res;
         }
         return result;
     }
@@ -88,9 +90,11 @@ public:
         if (res == -1) {
             set->insertAt(posToInsert, key);
             result.item = set->get(posToInsert);
+            result.index = res;
             return result;
         } else {
             result.item = set->get(res);
+            result.index = res;
         }
         return result;
 

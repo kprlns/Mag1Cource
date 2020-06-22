@@ -46,15 +46,14 @@ public:
 
     void printAllDocumentsWithSnippets(Vector<Document*>* documents, Vector<SnippetGeneratorResult*>* snippets, bool onlyHeaders, int maxRes) {
         HashMap<double, Pair<Document*, SnippetGeneratorResult*>> sortedBySnippets(100);
-        for(int i = 0; i < documents->getSize(); ++i) {
-            sortedBySnippets.put(snippets->get(i)->maxSnippetWeight,
+        for(int i = 0; i < snippets->getSize(); ++i) {
+            sortedBySnippets.put( snippets->get(i)->tfIdf + snippets->get(i)->sum,
                     Pair<Document*, SnippetGeneratorResult*>(documents->get(i), snippets->get(i)));
         }
 
-
         int cnt = 0;
         std::wcout << "<ol>";
-        //for(int i = 0; i < documents->getSize() && i < maxRes; ++i) {
+        //for(int i = 0; i < documents->getSize() && cnt < maxRes; ++i) {
         for(int i = sortedBySnippets.getSize() - 1; i >= 0 && cnt < maxRes; --i) {
             cnt++;
             auto current = sortedBySnippets.getAtPos(i);
@@ -75,7 +74,7 @@ public:
         //doc->print();
         std::wcout << L"[";
         std::wcout << tfIdf << L" | ";
-        std::wcout << std::setprecision(3) << snippet->maxSnippetWeight << L"] ";
+        std::wcout << std::setprecision(3) << snippet->maxSnippetWeight << L"] "; //<< document->getDocId() << " ";
         //for(int i = 0; i < operandHashes->getSize(); ++i) {
         //    std::wcout << "{ " << TfIdf().tf(document->getDocId(), operandHashes->getAtPos(i), index) << L" "
         //               << operandHashes->getAtPos(i) << " }";

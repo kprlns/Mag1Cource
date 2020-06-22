@@ -41,7 +41,7 @@ def perform_query(n_lines, only_headers):
 def perform_query_tf_idf(n_lines, only_headers):
     # print('./tf_idf {0} {1} {2}'.format(query_file_name, n_lines, only_headers))
     out = subprocess.Popen(
-        './snippet {0} {1} {2}'.format(query_file_name, n_lines, only_headers),
+        './zoned {0} {1} {2}'.format(query_file_name, n_lines, only_headers),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, shell=True)
     tmp = out.communicate()[0].decode('utf-8')

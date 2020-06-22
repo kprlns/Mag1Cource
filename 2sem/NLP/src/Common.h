@@ -11,6 +11,11 @@
 #include <chrono>
 
 
+static const unsigned char TITLE = 0b1;
+static const unsigned char FIRST_FIVE = 0b10;
+static const unsigned char OTHER = 0b0;
+
+
 struct DelimeterInteger : std::numpunct<wchar_t> {
     wchar_t do_thousands_sep() const { return L'\u200c'; }
     std::string do_grouping() const { return "~"; }

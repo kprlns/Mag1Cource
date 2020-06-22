@@ -87,6 +87,10 @@ public:
                 indices->frequencies = VariableByte().decode(buffer, indices->frequencies);
 
             }
+            indices->flags->setSize(indexSize);
+            fileIndex.read((char *) indices->flags->getData(), sizeof(unsigned char) * indexSize);
+
+
             //for (int j = 0; j < indexSize; ++j) {
             //    fileIndex >> tmp;
             //    indices->add(tmp);

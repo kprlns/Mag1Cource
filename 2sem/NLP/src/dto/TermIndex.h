@@ -9,17 +9,23 @@
 
 class TermIndex {
 public:
+
     int count;
+    Vector<int>* docIds;
+    Vector<int>* frequencies;
+    Vector<unsigned char>* flags;
     TermIndex() {}
 
     TermIndex(int size) {
         count = 0;
         docIds = new Vector<int>(size);
         frequencies = new Vector<int>(size);
+        flags = new Vector<unsigned char>(size);
     }
     ~TermIndex() {
         delete docIds;
         delete frequencies;
+        delete flags;
     }
 
     int getSize() {
@@ -32,6 +38,13 @@ public:
         count += freq;
     }
 
+    void add(int docId, int freq, unsigned char flag) {
+        docIds->add(docId);
+        frequencies->add(freq);
+        flags->add(flag);
+        count += freq;
+    }
+
     void increaseFreqLast(int add) {
         (*frequencies->getPointer(getSize() - 1)) += add;
         count += add;
@@ -39,9 +52,11 @@ public:
     int getCount() {
         return count;
     }
-
-    Vector<int>* docIds;
-    Vector<int>* frequencies;
-
+    unsigned char isTitle(int i) {
+        return TITLE & flags->get(i);
+    }
+    unsigned char isPresentInFirstFive(int i) {
+        return FIRST_FIVE & flags->get(i);
+    }
 };
 #endif //NLP_TERMINDEX_H

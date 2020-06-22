@@ -8,39 +8,38 @@
 #include <index/IndexSaver.h>
 #include "Common.h"
 
-int main_ewjknewp() {
+int main_ejwnfkejk() {
     Commons::setLocale();
     //std::wcout << L"!!" << sizeof(char);
     //std::wcout << L"!!!" << (0b10000000);
 
     //BucketIndex *bucketIndex = Indexer().bucketIndexFile(
     //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json");
-
-    auto startFull = std::chrono::steady_clock::now();
-    BucketIndex *bucketIndex1 = BucketIndexLoader(false).load(
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos",
-            "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic"
+    auto startLoad = std::chrono::steady_clock::now();
+    BucketIndex* bucketIndex1 = Indexer().bucketIndexWithZones(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic.json"
     );
-    auto endFull = std::chrono::steady_clock::now();
 
+    BucketIndexSaver(true).save(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Ind_compressed2_not_stem",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Pos_compressed2_not_stem",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Forward_compressed2_not_stem",
+            bucketIndex1
+    );
 
-    auto startCompr = std::chrono::steady_clock::now();
-    //BucketIndex *bucketIndex2 = BucketIndexLoader(true).load(
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Ind_compressed",
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Pos_compressed",
-    //        "/home/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/cleanedDataMusic_Forward_compressed"
-    //);
-    auto endCompr = std::chrono::steady_clock::now();
-
-    //bucketIndex->printAll();
-    std::wcout << L"Elapsed time full: " << std::chrono::duration_cast<std::chrono::milliseconds>(endFull - startFull).count() << std::endl;
-
-    std::wcout << L"\n\n-=-=-=-=--=-=-=-=-=-=-=-=\n\n";
-    std::wcout << L"Elapsed time compr: " << std::chrono::duration_cast<std::chrono::milliseconds>(endCompr - startCompr).count() << std::endl;
+    BucketIndex *bucketIndex2 = BucketIndexLoader(true).load(
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Ind_compressed2_not_stem",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Pos_compressed2_not_stem",
+            "/Users/kprlns/Desktop/Mag1Cource/2sem/NLP/docs/IndCompress/cleanedDataMusic_Forward_compressed2_not_stem"
+            );
 
     //bucketIndex1->printAll();
-    //std::wcout << L"!!Equals: " << bucketIndex->equals(bucketIndex1);
+
+    auto endLoad = std::chrono::steady_clock::now();
+    std::wcout << L"Elapsed time full: "
+               << std::chrono::duration_cast<std::chrono::milliseconds>(endLoad - startLoad).count() << std::endl;
+
+    std::wcout << "Equals: " << bucketIndex1->equals(bucketIndex2);
 }
 
 /*
